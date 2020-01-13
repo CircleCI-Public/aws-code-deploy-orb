@@ -1,0 +1,37 @@
+description: |
+  Bundles and uploads to Amazon Simple Storage Service (Amazon S3) an application revision
+parameters:
+  application-name:
+    description:
+      "The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account."
+    type: string
+  bundle-source:
+    description:
+      "The directory relative to your project to package up into an application revision."
+    type: string
+    default: "."
+  bundle-bucket:
+    description:
+      "The s3 bucket where an application revision will be stored"
+    type: string
+  bundle-key:
+    description:
+      "A key under the s3 bucket where an application revision will be stored"
+    type: string
+  bundle-type:
+    description:
+      "The file type used for an application revision bundle. Currently defaults to 'zip'"
+    type: string
+    default: "zip"
+  arguments:
+    description: If you wish to pass any additional arguments to the aws deploy command
+    type: string
+    default: ''
+steps:
+  - run:
+      name: push-bundle
+      command: |
+        aws deploy push \
+          --application-name << parameters.application-name >> \
+          --source << parameters.bundle-source >> \
+          --s3-location s3://<< parameters.bundle-bucket >>/<< parameters.bundle-key >>.<< parameters.bundle-type >><<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>
