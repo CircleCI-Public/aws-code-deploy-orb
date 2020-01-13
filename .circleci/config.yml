@@ -25,10 +25,13 @@ jobs:
   # Rename this job and add more as needed.
   #
   integration-test-1:
-    executor: orb-tools/ubuntu
+    docker:
+      - image: cimg/openjdk:13.0
     steps:
       - checkout
-    # - your-orb/your-orb-command
+      - run:
+          name: Needs Tests!
+          command: echo "This orb is currently not tested. Please implement a small test project for testing purposes."
 
 workflows:
   # This `lint-pack_validate_publish-dev` workflow will run on any commit.
