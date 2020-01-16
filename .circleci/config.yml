@@ -4,6 +4,7 @@ version: 2.1
 # release must exist.);
 orbs:
   aws-code-deploy: circleci/aws-code-deploy@dev:alpha
+  aws-cli: circleci/aws-cli@0.1
   orb-tools: circleci/orb-tools@9.0
 
 # Pipeline parameters
@@ -29,9 +30,11 @@ jobs:
       - image: cimg/openjdk:13.0
     steps:
       - checkout
-      - run:
-          name: Needs Tests!
-          command: echo "This orb is currently not tested. Please implement a small test project for testing purposes."
+      - aws-code-deploy/push-bundle:
+          application-name: CCI_CodeDeploy_Orb
+          bundle-source: ./sample_app
+          bundle-bucket: orb-testing
+          bundle-key: code_deploy_sample
 
 workflows:
   # This `lint-pack_validate_publish-dev` workflow will run on any commit.
