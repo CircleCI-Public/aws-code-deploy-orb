@@ -30,6 +30,7 @@ jobs:
       - image: cimg/openjdk:13.0
     steps:
       - checkout
+      - aws-cli/setup
       - aws-code-deploy/push-bundle:
           application-name: CCI_CodeDeploy_Orb
           bundle-source: ./sample_app
