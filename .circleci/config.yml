@@ -27,7 +27,7 @@ jobs:
   #
   integration-test-1:
     docker:
-      - image: cimg/openjdk:13.0
+      - image: cimg/python:3.8
     steps:
       - checkout
       - aws-cli/setup
