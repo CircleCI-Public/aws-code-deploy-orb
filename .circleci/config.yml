@@ -36,6 +36,12 @@ jobs:
           bundle-source: ./sample_app
           bundle-bucket: orb-testing
           bundle-key: code_deploy_sample
+      - aws-code-deploy/deploy-bundle:
+          application-name: CCI_CodeDeploy_Orb
+          deployment-group: CCI_Orb_Test
+          bundle-bucket: orb-testing
+          bundle-key: code_deploy_sample
+
 
 workflows:
   # This `lint-pack_validate_publish-dev` workflow will run on any commit.
