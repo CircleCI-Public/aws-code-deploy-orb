@@ -10,7 +10,9 @@ Example use-cases are provided on the orb [registry page](https://circleci.com/o
 ## Resources
 
 [CircleCI Orb Registry Page](https://circleci.com/orbs/registry/orb/circleci/aws-code-deploy) - The official registry page of this orb for all versions, executors, commands, and jobs described.  
-[CircleCI Orb Docs](https://circleci.com/docs/2.0/orb-intro/#section=configuration) - Docs for using and creating CircleCI Orbs.  
+[CircleCI Orb Docs](https://circleci.com/docs/2.0/orb-intro/#section=configuration) - Docs for using and creating CircleCI Orbs.
+[AWS CodeDeploy](https://aws.amazon.com/codedeploy/) - Automate code deployments to maintain application uptime.
+[AWS CodeDeploy Docs](https://docs.aws.amazon.com/codedeploy/latest/userguide/welcome.html) - User Guide
 
 ### How To Contribute
 
