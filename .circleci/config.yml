@@ -33,7 +33,7 @@ jobs:
       - aws-cli/setup
       - run:
           name: Start Instance
-          command: aws start-instances --instance-ids "i-07639163720fe5338"
+          command: aws ec2 start-instances --instance-ids "i-07639163720fe5338"
       - aws-code-deploy/push-bundle:
           application-name: CCI_CodeDeploy_Orb
           bundle-source: ./sample_app
@@ -46,7 +46,7 @@ jobs:
           bundle-key: code_deploy_sample
       - run:
           name: Shutdown Instance
-          command: aws stop-instances --instance-ids "i-07639163720fe5338"
+          command: aws ec2 stop-instances --instance-ids "i-07639163720fe5338"
 
 workflows:
   # This `lint-pack_validate_publish-dev` workflow will run on any commit.
