@@ -1,0 +1,65 @@
+description: |
+  Deploy from a bundle and wait until the deployment has successfully completed.
+parameters:
+  application-name:
+    description:
+      "The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account."
+    type: string
+  deployment-group:
+    description:
+      "The name of a new deployment group for the specified application."
+    type: string
+  deployment-config:
+    description:
+      "Predefined deployment configuration name."
+    type: string
+    default: "CodeDeployDefault.OneAtATime"
+  bundle-bucket:
+    description:
+      "The s3 bucket where an application revision will be stored"
+    type: string
+  bundle-key:
+    description:
+      "A key under the s3 bucket where an application revision will be stored"
+    type: string
+  bundle-type:
+    description:
+      "The file type used for an application revision bundle. Currently defaults to 'zip'"
+    type: string
+    default: "zip"
+  arguments:
+    description: If you wish to pass any additional arguments to the aws deploy command
+    type: string
+    default: ''
+steps:
+  - run:
+      name: deploy-bundle
+      command: |
+        ID=$(aws deploy create-deployment \
+                --application-name << parameters.application-name >> \
+                --deployment-group-name << parameters.deployment-group >> \
+                --deployment-config-name << parameters.deployment-config >> \
+                --s3-location bucket=<< parameters.bundle-bucket >>,bundleType=<< parameters.bundle-type >>,key=<< parameters.bundle-key >>.<< parameters.bundle-type >> \
+                --output text \
+                --query '[deploymentId]'<<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>)
+        STATUS=$(aws deploy get-deployment \
+                  --deployment-id $ID \
+                  --output text \
+                  --query '[deploymentInfo.status]'<<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>)
+        while [[ $STATUS == "Created" || $STATUS == "InProgress" || $STATUS == "Pending" || $STATUS == "Queued" || $STATUS == "Ready" ]]; do
+          echo "Status: $STATUS..."
+          STATUS=$(aws deploy get-deployment \
+                    --deployment-id $ID \
+                    --output text \
+                    --query '[deploymentInfo.status]'<<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>)
+          sleep 5
+        done
+        if [[ $STATUS == "Succeeded" ]]; then
+          EXITCODE=0
+          echo "Deployment finished."
+        else
+          EXITCODE=1
+          echo "Deployment failed!"
+        fi
+        aws deploy get-deployment --deployment-id $ID<<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>
+        exit $EXITCODE
