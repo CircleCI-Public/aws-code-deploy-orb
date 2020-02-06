@@ -42,6 +42,10 @@ parameters:
     description: If you wish to pass any additional arguments to the aws deploy command
     type: string
     default: ''
+  get-deployment-group-arguments:
+    description: If you wish to pass any additional arguments to the get-deployment-group command
+    type: string
+    default: ''
 executor: aws-cli/default
 steps:
   - checkout
@@ -54,6 +58,7 @@ steps:
       deployment-group: << parameters.deployment-group >>
       deployment-config: << parameters.deployment-config >>
       service-role-arn: << parameters.service-role-arn >>
+      get-deployment-group-arguments: << parameters.get-deployment-group-arguments >>
       arguments: << parameters.arguments >>
   - push-bundle:
       application-name: << parameters.application-name >>
