@@ -46,6 +46,10 @@ parameters:
     description: If you wish to pass any additional arguments to the get-deployment-group command
     type: string
     default: ''
+  deploy-bundle-arguments:
+    description: If you wish to pass any additional arguments to the get-deployment-group command
+    type: string
+    default: ''
 executor: aws-cli/default
 steps:
   - checkout
@@ -75,3 +79,4 @@ steps:
       bundle-key: << parameters.bundle-key >>
       bundle-type: << parameters.bundle-type >>
       arguments: << parameters.arguments >>
+      deploy-bundle-arguments: << parameters.deploy-bundle-arguments >>

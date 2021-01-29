@@ -27,8 +27,9 @@ parameters:
       "The file type used for an application revision bundle. Currently defaults to 'zip'"
     type: string
     default: "zip"
-  arguments:
-    description: If you wish to pass any additional arguments to the aws deploy command
+  deploy-bundle-arguments:
+    description: 
+      "If you wish to pass any additional arguments to the aws create-deployment command"
     type: string
     default: ''
 steps:
@@ -41,7 +42,7 @@ steps:
                 --deployment-config-name << parameters.deployment-config >> \
                 --s3-location bucket=<< parameters.bundle-bucket >>,bundleType=<< parameters.bundle-type >>,key=<< parameters.bundle-key >>.<< parameters.bundle-type >> \
                 --output text \
-                --query '[deploymentId]'<<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>)
+                --query '[deploymentId]'<<# parameters.deploy-bundle-arguments >> << parameters.deploy-bundle-arguments >><</parameters.deploy-bundle-arguments >>)
         STATUS=$(aws deploy get-deployment \
                   --deployment-id $ID \
                   --output text \
