@@ -4,8 +4,8 @@ version: 2.1
 # release must exist.);
 orbs:
   aws-code-deploy: circleci/aws-code-deploy@dev:alpha
-  aws-cli: circleci/aws-cli@0.1
-  orb-tools: circleci/orb-tools@9.0
+  aws-cli: circleci/aws-cli@1.4.0
+  orb-tools: circleci/orb-tools@10.0.3
 
 # Pipeline parameters
 parameters:
