@@ -41,7 +41,7 @@ jobs:
           bundle-key: code_deploy_sample
       - aws-code-deploy/deploy-bundle:
           application-name: CCI_CodeDeploy_Orb
-          deployment-group: CCI_Orb_Test
+          deployment-group: CCI_CodeDeploy_Orb-DeploymentGroup
           bundle-bucket: orb-testing
           bundle-key: code_deploy_sample
       - run:
