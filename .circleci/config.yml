@@ -35,13 +35,13 @@ jobs:
           name: Start Instance
           command: aws ec2 start-instances --instance-ids "$AWS_CD_EC2_ID"
       - aws-code-deploy/push-bundle:
-          application-name: CCI_CodeDeploy_Orb
+          application-name: CodeDeployOrb_App
           bundle-source: ./sample_app
           bundle-bucket: orb-testing
           bundle-key: code_deploy_sample
       - aws-code-deploy/deploy-bundle:
-          application-name: CCI_CodeDeploy_Orb
-          deployment-group: CCI_CodeDeploy_Orb-DeploymentGroup
+          application-name: CodeDeployOrb_App
+          deployment-group: CodeDeployOrb_Group
           bundle-bucket: orb-testing
           bundle-key: code_deploy_sample
       - run:
