@@ -4,8 +4,8 @@ version: 2.1
 # release must exist.);
 orbs:
   aws-code-deploy: circleci/aws-code-deploy@dev:alpha
-  aws-cli: circleci/aws-cli@0.1
-  orb-tools: circleci/orb-tools@9.0
+  aws-cli: circleci/aws-cli@1.4.0
+  orb-tools: circleci/orb-tools@10.0.3
 
 # Pipeline parameters
 parameters:
@@ -33,20 +33,20 @@ jobs:
       - aws-cli/setup
       - run:
           name: Start Instance
-          command: aws ec2 start-instances --instance-ids "i-07639163720fe5338"
+          command: aws ec2 start-instances --instance-ids "$AWS_CD_EC2_ID"
       - aws-code-deploy/push-bundle:
-          application-name: CCI_CodeDeploy_Orb
+          application-name: CodeDeployOrb_App
           bundle-source: ./sample_app
           bundle-bucket: orb-testing
           bundle-key: code_deploy_sample
       - aws-code-deploy/deploy-bundle:
-          application-name: CCI_CodeDeploy_Orb
-          deployment-group: CCI_Orb_Test
+          application-name: CodeDeployOrb_App
+          deployment-group: CodeDeployOrb_Group
           bundle-bucket: orb-testing
           bundle-key: code_deploy_sample
       - run:
           name: Shutdown Instance
-          command: aws ec2 stop-instances --instance-ids "i-07639163720fe5338"
+          command: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID"
 
 workflows:
   # This `lint-pack_validate_publish-dev` workflow will run on any commit.

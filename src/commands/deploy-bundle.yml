@@ -27,8 +27,13 @@ parameters:
       "The file type used for an application revision bundle. Currently defaults to 'zip'"
     type: string
     default: "zip"
-  arguments:
-    description: If you wish to pass any additional arguments to the aws deploy command
+  get-deployment-group-arguments:
+    description: If you wish to pass any additional arguments to the get-deployment-group command
+    type: string
+    default: ''
+  deploy-bundle-arguments:
+    description:
+      "If you wish to pass any additional arguments to the aws create-deployment command"
     type: string
     default: ''
 steps:
@@ -41,17 +46,17 @@ steps:
                 --deployment-config-name << parameters.deployment-config >> \
                 --s3-location bucket=<< parameters.bundle-bucket >>,bundleType=<< parameters.bundle-type >>,key=<< parameters.bundle-key >>.<< parameters.bundle-type >> \
                 --output text \
-                --query '[deploymentId]'<<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>)
+                --query '[deploymentId]'<<# parameters.deploy-bundle-arguments >> << parameters.deploy-bundle-arguments >><</parameters.deploy-bundle-arguments >>)
         STATUS=$(aws deploy get-deployment \
                   --deployment-id $ID \
                   --output text \
-                  --query '[deploymentInfo.status]'<<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>)
+                  --query '[deploymentInfo.status]'<<# parameters.get-deployment-group-arguments >> << parameters.get-deployment-group-arguments >><</parameters.get-deployment-group-arguments >>)
         while [[ $STATUS == "Created" || $STATUS == "InProgress" || $STATUS == "Pending" || $STATUS == "Queued" || $STATUS == "Ready" ]]; do
           echo "Status: $STATUS..."
           STATUS=$(aws deploy get-deployment \
                     --deployment-id $ID \
                     --output text \
-                    --query '[deploymentInfo.status]'<<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>)
+                    --query '[deploymentInfo.status]'<<# parameters.get-deployment-group-arguments >> << parameters.get-deployment-group-arguments >><</parameters.get-deployment-group-arguments >>)
           sleep 5
         done
         if [[ $STATUS == "Succeeded" ]]; then
@@ -61,5 +66,5 @@ steps:
           EXITCODE=1
           echo "Deployment failed!"
         fi
-        aws deploy get-deployment --deployment-id $ID<<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>
+        aws deploy get-deployment --deployment-id $ID<<# parameters.get-deployment-group-arguments >> << parameters.get-deployment-group-arguments >><</parameters.get-deployment-group-arguments >>
         exit $EXITCODE
