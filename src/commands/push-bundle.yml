@@ -1,6 +1,11 @@
 description: |
   Bundles and uploads to Amazon Simple Storage Service (Amazon S3) an application revision
 parameters:
+  profile-name:
+    description:
+      "The name of an AWS profile to use with aws-cli commands"
+    type: string
+    default: 'default'
   application-name:
     description:
       "The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account."
@@ -31,7 +36,8 @@ steps:
   - run:
       name: push-bundle
       command: |
-        aws deploy push \
+        aws --profile-name << parameters.profile-name >> \
+          deploy push \
           --application-name << parameters.application-name >> \
           --source << parameters.bundle-source >> \
           --s3-location s3://<< parameters.bundle-bucket >>/<< parameters.bundle-key >>.<< parameters.bundle-type >><<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>

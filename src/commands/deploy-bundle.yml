@@ -1,6 +1,11 @@
 description: |
   Deploy from a bundle and wait until the deployment has successfully completed.
 parameters:
+  profile-name:
+    description:
+      "The name of an AWS profile to use with aws-cli commands"
+    type: string
+    default: 'default'
   application-name:
     description:
       "The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account."
@@ -40,20 +45,23 @@ steps:
   - run:
       name: deploy-bundle
       command: |
-        ID=$(aws deploy create-deployment \
+        ID=$(aws --profile-name << parameters.profile-name >> \
+                deploy create-deployment \
                 --application-name << parameters.application-name >> \
                 --deployment-group-name << parameters.deployment-group >> \
                 --deployment-config-name << parameters.deployment-config >> \
                 --s3-location bucket=<< parameters.bundle-bucket >>,bundleType=<< parameters.bundle-type >>,key=<< parameters.bundle-key >>.<< parameters.bundle-type >> \
                 --output text \
                 --query '[deploymentId]'<<# parameters.deploy-bundle-arguments >> << parameters.deploy-bundle-arguments >><</parameters.deploy-bundle-arguments >>)
-        STATUS=$(aws deploy get-deployment \
+        STATUS=$(aws --profile-name << parameters.profile-name >> \
+                  deploy get-deployment \
                   --deployment-id $ID \
                   --output text \
                   --query '[deploymentInfo.status]'<<# parameters.get-deployment-group-arguments >> << parameters.get-deployment-group-arguments >><</parameters.get-deployment-group-arguments >>)
         while [[ $STATUS == "Created" || $STATUS == "InProgress" || $STATUS == "Pending" || $STATUS == "Queued" || $STATUS == "Ready" ]]; do
           echo "Status: $STATUS..."
-          STATUS=$(aws deploy get-deployment \
+          STATUS=$(aws --profile-name << parameters.profile-name >> \
+                    deploy get-deployment \
                     --deployment-id $ID \
                     --output text \
                     --query '[deploymentInfo.status]'<<# parameters.get-deployment-group-arguments >> << parameters.get-deployment-group-arguments >><</parameters.get-deployment-group-arguments >>)
@@ -66,5 +74,6 @@ steps:
           EXITCODE=1
           echo "Deployment failed!"
         fi
-        aws deploy get-deployment --deployment-id $ID<<# parameters.get-deployment-group-arguments >> << parameters.get-deployment-group-arguments >><</parameters.get-deployment-group-arguments >>
+        aws --profile-name << parameters.profile-name >> \
+            deploy get-deployment --deployment-id $ID<<# parameters.get-deployment-group-arguments >> << parameters.get-deployment-group-arguments >><</parameters.get-deployment-group-arguments >>
         exit $EXITCODE

@@ -2,6 +2,11 @@
 description: >
   Creates an application.
 parameters:
+  profile-name:
+    description:
+      "The name of an AWS profile to use with aws-cli commands"
+    type: string
+    default: 'default'
   application-name:
     description:
       "The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account."
@@ -15,11 +20,13 @@ steps:
       name: ensure-application-created
       command: |
         set +e
-        aws deploy get-application --application-name << parameters.application-name >><<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>
+        aws --profile-name << parameters.profile-name >> \
+            deploy get-application --application-name << parameters.application-name >><<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>
         if [ $? -ne 0 ]; then
           set -e
           echo "No application named << parameters.application-name >> found. Trying to create a new one"
-          aws deploy create-application --application-name << parameters.application-name >><<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>
+          aws --profile-name << parameters.profile-name >> \
+              deploy create-application --application-name << parameters.application-name >><<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>
         else
           set -e
           echo "Application named << parameters.application-name >> already exists. Skipping creation."
