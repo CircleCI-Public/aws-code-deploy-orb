@@ -37,8 +37,8 @@ jobs:
       - aws-code-deploy/push-bundle:
           application-name: CodeDeployOrb_App
           bundle-source: ./sample_app
-          bundle-bucket: orb-testing
-          bundle-key: code_deploy_sample
+          bundle-bucket: aws-codedeploy-orb-test
+          bundle-key: SampleApp_Linux
       - aws-code-deploy/deploy-bundle:
           application-name: CodeDeployOrb_App
           deployment-group: CodeDeployOrb_Group
