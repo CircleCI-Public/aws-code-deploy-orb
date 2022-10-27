@@ -6,7 +6,7 @@ set +e
 aws deploy get-deployment-group \
 --application-name "${ORB_EVAL_APPLICATION_NAME}" \
 --deployment-group-name "${ORB_EVAL_DEPLOYMENT_GROUP}" \
---profile-name "${ORB_VAL_PROFILE_NAME}" "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}"
+--profile "${ORB_VAL_PROFILE_NAME}" "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}"
 
 if $? -ne 0; then
   set -e

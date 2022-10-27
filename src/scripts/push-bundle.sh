@@ -10,5 +10,5 @@ fi
 aws deploy push \
     --application-name "${ORB_EVAL_APPLICATION_NAME}" \
     --source "${ORB_VAL_BUNDLE_SOURCE}" \
-    --profile-name "${ORB_VAL_PROFILE_NAME}" \
+    --profile "${ORB_VAL_PROFILE_NAME}" \
     --s3-location s3://"${ORB_EVAL_BUNDLE_BUCKET}/${ORB_EVAL_BUNDLE_KEY}.${ORB_VAL_BUNDLE_TYPE}" "$@"
