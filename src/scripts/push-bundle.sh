@@ -4,7 +4,7 @@ ORB_EVAL_BUNDLE_BUCKET="$(eval echo "${ORB_EVAL_BUNDLE_BUCKET}")"
 ORB_EVAL_BUNDLE_KEY="$(eval echo "${ORB_EVAL_BUNDLE_KEY}")"
 
 if [ -n "${ORB_VAL_ARGUMENTS}" ]; then 
-    set -- "$@" "${PARAM_AWS_S3_ARGUMENTS}"
+    set -- "$@" "${ORB_VAL_ARGUMENTS}"
 fi 
 
 aws deploy push \
