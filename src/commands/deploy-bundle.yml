@@ -47,6 +47,6 @@ steps:
         ORB_EVAL_BUNDLE_BUCKET: << parameters.bundle-bucket >>
         ORB_EVAL_BUNDLE_KEY: << parameters.bundle-key >>
         ORB_VAL_BUNDLE_TYPE: << parameters.bundle-type >>
-        ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get-deployment-group-arguments >>        
+        ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get-deployment-group-arguments >>     
         ORB_VAL_DEPLOY_BUNDLE_ARGUMENTS: << parameters.deploy-bundle-arguments >>
       command: << include(scripts/deploy-bundle.sh) >>
