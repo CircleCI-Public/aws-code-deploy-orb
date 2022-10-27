@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  aws-code-deploy-orb: circleci/aws-code-deploy-orb@dev:<<pipeline.git.revision>>
+  aws-code-deploy: circleci/aws-code-deploy@dev:<<pipeline.git.revision>>
   orb-tools: circleci/orb-tools@11.4
   aws-cli: circleci/aws-cli@3.1
 filters: &filters
