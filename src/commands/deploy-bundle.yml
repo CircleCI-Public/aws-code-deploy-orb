@@ -12,7 +12,8 @@ parameters:
   deployment-config:
     description:
       "Predefined deployment configuration name."
-    type: string
+    type: enum
+    enum: [ CodeDeployDefault.OneAtATime, CodeDeployDefault.HalfAtATime, CodeDeployDefault.AllAtOnce ]
     default: "CodeDeployDefault.OneAtATime"
   bundle-bucket:
     description:
@@ -49,4 +50,3 @@ steps:
         ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get-deployment-group-arguments >>        
         ORB_VAL_DEPLOY_BUNDLE_ARGUMENTS: << parameters.deploy-bundle-arguments >>
       command: << include(scripts/deploy-bundle.sh) >>
-      
