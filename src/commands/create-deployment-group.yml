@@ -12,7 +12,8 @@ parameters:
   deployment-config:
     description:
       "Predefined deployment configuration name."
-    type: string
+    type: enum
+    enum: ["CodeDeployDefault.OneAtATime", "CodeDeployDefault.HalfAtATime", "CodeDeployDefault.AllAtOnce"]
     default: "CodeDeployDefault.OneAtATime"
   service-role-arn:
     description:
