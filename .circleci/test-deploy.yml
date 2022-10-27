@@ -1,0 +1,51 @@
+version: 2.1
+orbs:
+  aws-code-deploy: circleci/aws-code-deploy@dev:<<pipeline.git.revision>>
+  orb-tools: circleci/orb-tools@11.4
+  aws-cli: circleci/aws-cli@3.1
+filters: &filters
+  tags:
+    only: /.*/
+jobs:
+  integration-test:
+    docker:
+      - image: cimg/python:3.10.7
+    steps:
+      - checkout
+      - aws-cli/setup
+      - run:
+          name: Start Instance
+          command: aws ec2 start-instances --instance-ids "$AWS_CD_EC2_ID"
+      - aws-code-deploy/push-bundle:
+          application-name: CodeDeployOrb_App
+          bundle-source: ./sample_app
+          bundle-bucket: aws-codedeploy-orb-test
+          bundle-key: SampleApp_Linux
+      - aws-code-deploy/deploy-bundle:
+          application-name: CodeDeployOrb_App
+          deployment-group: CodeDeployOrb_App_Group
+          bundle-bucket: aws-codedeploy-orb-test
+          bundle-key: SampleApp_Linux
+      - run:
+          name: Shutdown Instance
+          command: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID"
+workflows:
+  test-deploy:
+    jobs:
+      - integration-test:
+          filters: *filters
+      - orb-tools/pack:
+          filters: *filters
+      - orb-tools/publish:
+          orb-name: circleci/aws-code-deploy-orb
+          vcs-type: << pipeline.project.type >>
+          pub-type: production
+          requires:
+            - orb-tools/pack
+            - integration-test
+          context: orb-publisher
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
