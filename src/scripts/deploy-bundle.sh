@@ -4,6 +4,13 @@ ORB_EVAL_DEPLOYMENT_GROUP="$(eval echo "${ORB_EVAL_DEPLOYMENT_GROUP}")"
 ORB_EVAL_BUNDLE_BUCKET="$(eval echo "${ORB_EVAL_BUNDLE_BUCKET}")"
 ORB_EVAL_BUNDLE_KEY="$(eval echo "${ORB_EVAL_BUNDLE_KEY}")"
 
+if [ -n "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}" ]; then 
+  set -- "$@" "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}"
+fi
+
+if [ -n "${ORB_VAL_DEPLOY_BUNDLE_ARGUMENTS}" ]; then
+  set -- "$@" "${ORB_VAL_DEPLOY_BUNDLE_ARGUMENTS}"
+fi 
 
 ID=$(aws deploy create-deployment \
     --application-name "${ORB_EVAL_APPLICATION_NAME}" \
