@@ -27,7 +27,7 @@ jobs:
   #
   integration-test-1:
     docker:
-      - image: cimg/python:3.8
+      - image: cimg/python:3.10.7
     steps:
       - checkout
       - aws-cli/setup
@@ -37,13 +37,13 @@ jobs:
       - aws-code-deploy/push-bundle:
           application-name: CodeDeployOrb_App
           bundle-source: ./sample_app
-          bundle-bucket: orb-testing
-          bundle-key: code_deploy_sample
+          bundle-bucket: aws-codedeploy-orb-test
+          bundle-key: SampleApp_Linux
       - aws-code-deploy/deploy-bundle:
           application-name: CodeDeployOrb_App
-          deployment-group: CodeDeployOrb_Group
-          bundle-bucket: orb-testing
-          bundle-key: code_deploy_sample
+          deployment-group: CodeDeployOrb_App_Group
+          bundle-bucket: aws-codedeploy-orb-test
+          bundle-key: SampleApp_Linux
       - run:
           name: Shutdown Instance
           command: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID"
@@ -68,7 +68,7 @@ workflows:
       # if using Contexts, add your context below
       - orb-tools/publish-dev:
           orb-name: circleci/aws-code-deploy
-          context: orb-publishing
+          context: orb-publisher
           requires:
             - orb-tools/pack
 
@@ -76,7 +76,7 @@ workflows:
       # dev:${CIRCLE_SHA1:0:7} version of your orb
       - orb-tools/trigger-integration-tests-workflow:
           name: trigger-integration-dev
-          context: orb-publishing
+          context: orb-publisher
           requires:
             - orb-tools/publish-dev
 
@@ -102,7 +102,7 @@ workflows:
       # e.g. [semver:patch] will cause a patch version to be published.
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: circleci/aws-code-deploy
-          context: orb-publishing
+          context: orb-publisher
           add-pr-comment: true
           bot-token-variable: GHI_TOKEN
           bot-user: cpe-bot
