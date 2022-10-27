@@ -37,6 +37,11 @@ parameters:
       "If you wish to pass any additional arguments to the aws create-deployment command"
     type: string
     default: ''
+  profile-name:
+    description:
+      "The name of an AWS profile to use with aws-cli commands"
+    type: string
+    default: 'default'
 steps:
   - run:
       name: deploy-bundle
@@ -49,4 +54,5 @@ steps:
         ORB_VAL_BUNDLE_TYPE: << parameters.bundle-type >>
         ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get-deployment-group-arguments >>
         ORB_VAL_DEPLOY_BUNDLE_ARGUMENTS: << parameters.deploy-bundle-arguments >>
+        ORB_VAL_PROFILE_NAME: << parameters.profile-name >>
       command: << include(scripts/deploy-bundle.sh) >>

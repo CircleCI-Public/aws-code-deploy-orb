@@ -9,10 +9,16 @@ parameters:
     description: If you wish to pass any additional arguments to the aws deploy command
     type: string
     default: ''
+  profile-name:
+    description:
+      "The name of an AWS profile to use with aws-cli commands"
+    type: string
+    default: 'default'
 steps:
   - run:
       name: ensure-application-created
       environment:
         ORB_EVAL_APPLICATION_NAME: << parameters.application-name >>
         ORB_VAL_ARGUMENTS: << parameters.arguments >>
+        ORB_VAL_PROFILE_NAME: << parameters.profile-name >>
       command: << include(scripts/create-application.sh) >>
