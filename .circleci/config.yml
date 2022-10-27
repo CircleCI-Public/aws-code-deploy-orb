@@ -41,7 +41,7 @@ jobs:
           bundle-key: SampleApp_Linux
       - aws-code-deploy/deploy-bundle:
           application-name: CodeDeployOrb_App
-          deployment-group: CodeDeployOrb_Group
+          deployment-group: CodeDeployOrb_App_Group
           bundle-bucket: orb-testing
           bundle-key: code_deploy_sample
       - run:
