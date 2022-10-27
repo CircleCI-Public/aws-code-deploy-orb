@@ -42,7 +42,7 @@ jobs:
       - aws-code-deploy/deploy-bundle:
           application-name: CodeDeployOrb_App
           deployment-group: CodeDeployOrb_App_Group
-          bundle-bucket: orb-testing
+          bundle-bucket: aws-codedeploy-orb-test
           bundle-key: code_deploy_sample
       - run:
           name: Shutdown Instance
