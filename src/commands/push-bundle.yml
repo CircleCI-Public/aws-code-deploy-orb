@@ -27,6 +27,11 @@ parameters:
     description: If you wish to pass any additional arguments to the aws deploy command
     type: string
     default: ''
+  profile-name:
+    description:
+      "The name of an AWS profile to use with aws-cli commands"
+    type: string
+    default: 'default'
 steps:
   - run:
       name: push-bundle
@@ -37,4 +42,5 @@ steps:
         ORB_EVAL_BUNDLE_KEY: << parameters.bundle-key >>
         ORB_VAL_BUNDLE_TYPE: << parameters.bundle-type >>
         ORB_VAL_ARGUMENTS: << parameters.arguments >>
+        ORB_VAL_PROFILE_NAME: << parameters.profile-name >>
       command: << include(scripts/push-bundle.sh) >>

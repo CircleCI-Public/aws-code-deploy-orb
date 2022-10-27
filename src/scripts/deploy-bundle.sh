@@ -17,16 +17,19 @@ ID=$(aws deploy create-deployment \
     --deployment-group-name "${ORB_EVAL_DEPLOYMENT_GROUP}" \
     --deployment-config-name "${ORB_VAL_DEPLOYMENT_CONFIG}" \
     --s3-location bucket="${ORB_EVAL_BUNDLE_BUCKET}",bundleType="${ORB_VAL_BUNDLE_TYPE}",key="${ORB_EVAL_BUNDLE_KEY}"."${ORB_VAL_BUNDLE_TYPE}" \
+    --profile "${ORB_VAL_PROFILE_NAME}" \
     --output text \
     --query '[deploymentId]' "${ORB_VAL_DEPLOY_BUNDLE_ARGUMENTS}")
 STATUS=$(aws deploy get-deployment \
     --deployment-id "$ID" \
     --output text \
+    --profile "${ORB_VAL_PROFILE_NAME}" \
     --query '[deploymentInfo.status]' "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}")
 while [ "$STATUS" = "Created" ] || [ "$STATUS" = "InProgress" ] || [ "$STATUS" = "Pending" ] || [ "$STATUS" = "Queued" ] || [ "$STATUS" = "Ready" ]; do
   echo "Status: $STATUS..."
   STATUS=$(aws deploy get-deployment \
             --deployment-id "$ID" \
+            --profile "${ORB_VAL_PROFILE_NAME}" \
             --output text \
             --query '[deploymentInfo.status]'"${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}")
   sleep 5
@@ -38,5 +41,7 @@ else
   EXITCODE=1
   echo "Deployment failed!"
 fi
-aws deploy get-deployment --deployment-id "$ID" "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}"
+aws deploy get-deployment --deployment-id "$ID" \
+"${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}" \
+--profile "${ORB_VAL_PROFILE_NAME}"
 exit $EXITCODE
