@@ -7,7 +7,7 @@ aws deploy get-deployment-group \
 --application-name "${ORB_EVAL_APPLICATION_NAME}" \
 --deployment-group-name "${ORB_EVAL_DEPLOYMENT_GROUP}" "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}"
 
-if [ $? -ne 0 ]; then
+if $? -ne 0; then
   set -e
   echo "No deployment group named ${ORB_EVAL_DEPLOYMENT_GROUP} found. Trying to create a new one"
   aws deploy create-deployment-group \
