@@ -43,7 +43,7 @@ jobs:
           application-name: CodeDeployOrb_App
           deployment-group: CodeDeployOrb_App_Group
           bundle-bucket: aws-codedeploy-orb-test
-          bundle-key: code_deploy_sample
+          bundle-key: SampleApp_Linux
       - run:
           name: Shutdown Instance
           command: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID"
