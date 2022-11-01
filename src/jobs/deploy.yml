@@ -3,6 +3,8 @@ description: >
     bundle and upload an application revision to S3. Once uploaded this
     job will finally create a deployment based on that revision."
 parameters:
+  executor:
+    type: executor
   application-name:
     description:
       "The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account."
@@ -51,10 +53,9 @@ parameters:
     description: If you wish to pass any additional arguments to the deploy-bundle command
     type: string
     default: ''
-executor: aws-cli/default
+executor: << parameters.executor >>
 steps:
   - checkout
-  - aws-cli/setup
   - create-application:
       application-name: << parameters.application-name >>
       arguments: << parameters.arguments >>
