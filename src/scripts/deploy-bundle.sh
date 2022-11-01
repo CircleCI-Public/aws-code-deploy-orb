@@ -26,12 +26,14 @@ STATUS=$(aws deploy get-deployment \
     --deployment-id "$ID" \
     --output text \
     --profile "${ORB_VAL_PROFILE_NAME}" \
+    --region "${ORB_EVAL_REGION}" \
     --query '[deploymentInfo.status]' "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}")
 while [ "$STATUS" = "Created" ] || [ "$STATUS" = "InProgress" ] || [ "$STATUS" = "Pending" ] || [ "$STATUS" = "Queued" ] || [ "$STATUS" = "Ready" ]; do
   echo "Status: $STATUS..."
   STATUS=$(aws deploy get-deployment \
             --deployment-id "$ID" \
             --profile "${ORB_VAL_PROFILE_NAME}" \
+            --region "${ORB_EVAL_REGION}" \
             --output text \
             --query '[deploymentInfo.status]'"${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}")
   sleep 5
@@ -45,5 +47,6 @@ else
 fi
 aws deploy get-deployment --deployment-id "$ID" \
 "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}" \
---profile "${ORB_VAL_PROFILE_NAME}"
+--profile "${ORB_VAL_PROFILE_NAME}" \
+--region "${ORB_EVAL_REGION}"
 exit $EXITCODE
