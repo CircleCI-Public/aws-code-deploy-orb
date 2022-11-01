@@ -14,7 +14,7 @@ jobs:
       - checkout
       - run:
           name: Start Instance
-          command: aws ec2 start-instances --instance-ids "$AWS_CD_EC2_ID"
+          command: aws ec2 start-instances --instance-ids "$AWS_CD_EC2_ID" --region "$AWS_DEFAULT_REGION"
       - aws-code-deploy/push-bundle:
           application-name: CodeDeployOrb_App
           bundle-source: ./sample_app
@@ -27,7 +27,7 @@ jobs:
           bundle-key: SampleApp_Linux
       - run:
           name: Shutdown Instance
-          command: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID"
+          command: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID" --region "$AWS_DEFAULT_REGION"
 workflows:
   test-deploy:
     jobs:
