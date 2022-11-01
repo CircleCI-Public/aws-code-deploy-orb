@@ -70,7 +70,7 @@ steps:
       application-name: << parameters.application-name >>
       arguments: << parameters.arguments >>
       profile-name: << parameters.profile-name >>
-      region: << parameters.region >>      
+      region: << parameters.region >>
   - create-deployment-group:
       application-name: << parameters.application-name >>
       deployment-group: << parameters.deployment-group >>
@@ -79,7 +79,7 @@ steps:
       get-deployment-group-arguments: << parameters.get-deployment-group-arguments >>
       arguments: << parameters.arguments >>
       profile-name: << parameters.profile-name >>
-      region: << parameters.region >>  
+      region: << parameters.region >>
   - push-bundle:
       application-name: << parameters.application-name >>
       bundle-source: << parameters.bundle-source >>
@@ -88,7 +88,7 @@ steps:
       bundle-type: << parameters.bundle-type >>
       arguments: << parameters.arguments >>
       profile-name: << parameters.profile-name >>
-      region: << parameters.region >>       
+      region: << parameters.region >>
   - deploy-bundle:
       application-name: << parameters.application-name >>
       deployment-group: << parameters.deployment-group >>
@@ -99,4 +99,4 @@ steps:
       get-deployment-group-arguments: << parameters.get-deployment-group-arguments >>
       deploy-bundle-arguments: << parameters.deploy-bundle-arguments >>
       profile-name: << parameters.profile-name >>
-      region: << parameters.region >>       
+      region: << parameters.region >>
