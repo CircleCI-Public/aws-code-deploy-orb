@@ -1,11 +1,13 @@
 #!/bin/sh
 ORB_EVAL_APPLICATION_NAME="$(eval echo "${ORB_EVAL_APPLICATION_NAME}")"
 ORB_EVAL_DEPLOYMENT_GROUP="$(eval echo "${ORB_EVAL_DEPLOYMENT_GROUP}")"
+ORB_EVAL_REGION="$(eval echo "${ORB_EVAL_REGION}")"
 
 set +e
 aws deploy get-deployment-group \
 --application-name "${ORB_EVAL_APPLICATION_NAME}" \
 --deployment-group-name "${ORB_EVAL_DEPLOYMENT_GROUP}" \
+--region "${ORB_EVAL_REGION}" \
 --profile "${ORB_VAL_PROFILE_NAME}" "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}"
 
 if $? -ne 0; then

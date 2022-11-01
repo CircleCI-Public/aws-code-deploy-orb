@@ -3,6 +3,7 @@ ORB_EVAL_APPLICATION_NAME="$(eval echo "${ORB_EVAL_APPLICATION_NAME}")"
 ORB_EVAL_DEPLOYMENT_GROUP="$(eval echo "${ORB_EVAL_DEPLOYMENT_GROUP}")"
 ORB_EVAL_BUNDLE_BUCKET="$(eval echo "${ORB_EVAL_BUNDLE_BUCKET}")"
 ORB_EVAL_BUNDLE_KEY="$(eval echo "${ORB_EVAL_BUNDLE_KEY}")"
+ORB_EVAL_REGION="$(eval echo "${ORB_EVAL_REGION}")"
 
 if [ -n "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}" ]; then 
   set -- "$@" "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}"
@@ -16,6 +17,7 @@ ID=$(aws deploy create-deployment \
     --application-name "${ORB_EVAL_APPLICATION_NAME}" \
     --deployment-group-name "${ORB_EVAL_DEPLOYMENT_GROUP}" \
     --deployment-config-name "${ORB_VAL_DEPLOYMENT_CONFIG}" \
+    --region "${ORB_EVAL_REGION}" \
     --s3-location bucket="${ORB_EVAL_BUNDLE_BUCKET}",bundleType="${ORB_VAL_BUNDLE_TYPE}",key="${ORB_EVAL_BUNDLE_KEY}"."${ORB_VAL_BUNDLE_TYPE}" \
     --profile "${ORB_VAL_PROFILE_NAME}" \
     --output text \

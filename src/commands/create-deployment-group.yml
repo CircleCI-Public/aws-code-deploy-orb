@@ -32,6 +32,11 @@ parameters:
       "The name of an AWS profile to use with aws-cli commands"
     type: string
     default: 'default'
+  region:
+    type: string
+    default: ${AWS_DEFAULT_REGION}
+    description: >
+      AWS region of CodeDeploy App. Defaults to environment variable ${AWS_DEFAULT_REGION}.    
 steps:
   - run:
       name: ensure-deployment-created
@@ -43,4 +48,5 @@ steps:
         ORB_VAL_ARGUMENTS: << parameters.arguments >>
         ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get-deployment-group-arguments >>
         ORB_VAL_PROFILE_NAME: << parameters.profile-name >>
+        ORB_EVAL_REGION: << parameters.region >>
       command: << include(scripts/create-deployment-group.sh) >>
