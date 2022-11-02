@@ -3,7 +3,7 @@ description: >
 usage:
   version: 2.1
   orbs:
-    aws-code-deploy: circleci/aws-code-deploy@x.y
+    aws-code-deploy: circleci/aws-code-deploy@3.0
     # import aws-cli orb to install and configure authentication
     aws-cli: circleci/aws-cli@3.1
 
