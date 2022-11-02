@@ -3,12 +3,17 @@ description: >
 usage:
   version: 2.1
   orbs:
-    aws-code-deploy: circleci/aws-code-deploy@x.y
+    aws-code-deploy: circleci/aws-code-deploy@dev:<<pipeline.git.revision>>
+    # import aws-cli orb to install and configure authentication
+    aws-cli: circleci/aws-cli@3.1
 
   workflows:
     deploy_application:
       jobs:
         - aws-code-deploy/deploy:
+            pre-steps:
+              # install and configure aws credentials with static keys stored as env_vars
+              - aws-cli/setup
             application-name: myApplication
             deployment-group: myDeploymentGroup
             service-role-arn: myDeploymentGroupRoleARN
