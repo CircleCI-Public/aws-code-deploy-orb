@@ -49,5 +49,6 @@ fi
 aws deploy get-deployment --deployment-id "$ID" \
 "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}" \
 --profile "${ORB_VAL_PROFILE_NAME}" \
---region "${ORB_EVAL_REGION}"
+--region "${ORB_EVAL_REGION}" \
+--profile "${ORB_VAL_PROFILE_NAME}"
 exit $EXITCODE
