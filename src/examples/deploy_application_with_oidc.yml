@@ -1,0 +1,27 @@
+description: >
+  Deploy an application to AWS CodeDeploy with OIDC authentication
+usage:
+  version: 2.1
+  orbs:
+    aws-code-deploy: circleci/aws-code-deploy@3.0
+    # import aws-cli orb to install and configure OIDC authentication
+    aws-cli: circleci/aws-cli@3.1
+
+  workflows:
+    deploy_application:
+      jobs:
+        - aws-code-deploy/deploy:
+            pre-steps:
+              # install aws cli and authenticate with OIDC
+              - aws-cli/setup:
+                  profile: "OIDC-USER"
+                  role-arn: "arn:aws:iam::123456789012:role/VALID_OIDC_CODEDEPLOY_ROLE"
+            application-name: myApplication
+            deployment-group: myDeploymentGroup
+            service-role-arn: myDeploymentGroupRoleARN
+            bundle-bucket: myApplicationS3Bucket
+            bundle-key: myS3BucketKey
+            # must use same profile configured in aws-cli/setup command
+            profile: "OIDC-USER"
+            # must use valid CircleCI context for OIDC authentication
+            context: CircleCI_OIDC_Token

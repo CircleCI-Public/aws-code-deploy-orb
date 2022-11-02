@@ -27,11 +27,26 @@ parameters:
     description: If you wish to pass any additional arguments to the aws deploy command
     type: string
     default: ''
+  profile-name:
+    description:
+      "The name of an AWS profile to use with aws-cli commands"
+    type: string
+    default: 'default'
+  region:
+    type: string
+    default: ${AWS_DEFAULT_REGION}
+    description: >
+      AWS region of CodeDeploy App. Defaults to environment variable ${AWS_DEFAULT_REGION}.
 steps:
   - run:
       name: push-bundle
-      command: |
-        aws deploy push \
-          --application-name << parameters.application-name >> \
-          --source << parameters.bundle-source >> \
-          --s3-location s3://<< parameters.bundle-bucket >>/<< parameters.bundle-key >>.<< parameters.bundle-type >><<# parameters.arguments >> << parameters.arguments >><</parameters.arguments >>
+      environment:
+        ORB_EVAL_APPLICATION_NAME: << parameters.application-name >>
+        ORB_VAL_BUNDLE_SOURCE: << parameters.bundle-source >>
+        ORB_EVAL_BUNDLE_BUCKET: << parameters.bundle-bucket >>
+        ORB_EVAL_BUNDLE_KEY: << parameters.bundle-key >>
+        ORB_VAL_BUNDLE_TYPE: << parameters.bundle-type >>
+        ORB_VAL_ARGUMENTS: << parameters.arguments >>
+        ORB_VAL_PROFILE_NAME: << parameters.profile-name >>
+        ORB_EVAL_REGION: << parameters.region >>
+      command: << include(scripts/push-bundle.sh) >>
