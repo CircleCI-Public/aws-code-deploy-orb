@@ -12,19 +12,24 @@ jobs:
       - image: cimg/python:3.10.7
     steps:
       - checkout
+      - aws-cli/setup:
+          role-arn: "arn:aws:iam::122211685980:role/CPE_CODE_DEPLOY_OIDC_TEST"
+          profile-name: OIDC-User
       - run:
           name: Start Instance
-          command: aws ec2 start-instances --instance-ids "$AWS_CD_EC2_ID" --region "$AWS_DEFAULT_REGION"
+          command: aws ec2 start-instances --instance-ids "$AWS_CD_EC2_ID" --region "$AWS_DEFAULT_REGION" --profile "OIDC-User"
       - aws-code-deploy/push-bundle:
           application-name: CodeDeployOrb_App
           bundle-source: ./sample_app
           bundle-bucket: aws-codedeploy-orb-test
           bundle-key: SampleApp_Linux
+          profile-name: OIDC-User
       - aws-code-deploy/deploy-bundle:
           application-name: CodeDeployOrb_App
           deployment-group: CodeDeployOrb_App_Group
           bundle-bucket: aws-codedeploy-orb-test
           bundle-key: SampleApp_Linux
+          profile-name: OIDC-User
       - run:
           name: Shutdown Instance
           command: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID" --region "$AWS_DEFAULT_REGION"
@@ -34,8 +39,6 @@ workflows:
       - integration-test:
           context: CPE-OIDC
           pre-steps:
-            - aws-cli/setup:
-               role-arn: "arn:aws:iam::122211685980:role/CPE_CODE_DEPLOY_OIDC_TEST"
           filters: *filters
       - orb-tools/pack:
           filters: *filters
