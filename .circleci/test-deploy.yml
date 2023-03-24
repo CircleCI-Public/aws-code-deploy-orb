@@ -30,16 +30,30 @@ jobs:
           bundle-bucket: aws-codedeploy-orb-test
           bundle-key: SampleApp_Linux
           profile-name: OIDC-User
-      - run:
-          name: Shutdown Instance
-          command: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID" --region "$AWS_DEFAULT_REGION"
 workflows:
   test-deploy:
     jobs:
-      - integration-test:
+      # - integration-test:
+      #     context: CPE-OIDC
+      #     filters: *filters
+      - aws-code-deploy/deploy:
+          auth:
+            - aws-cli/setup:
+                role-arn: arn:aws:iam::122211685980:role/CPE_CODE_DEPLOY_OIDC_TEST
+                role-session-name: "Test-session"
+                profile-name: "OIDC-User"
+          profile-name: OIDC-User
+          application-name: CodeDeployOrb_App
+          deployment-group: CodeDeployOrb_App_Group
+          service-role-arn: arn:aws:iam::122211685980:role/CodeDeployServiceRole
+          bundle-source: ./sample_app
+          bundle-bucket: aws-codedeploy-orb-test
+          bundle-key: SampleApp_Linux
           context: CPE-OIDC
-          pre-steps:
-          filters: *filters
+          post-steps:
+            - run: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID" --region "$AWS_DEFAULT_REGION" --profile "OIDC-User"
+          # requires:
+          #   - integration-test
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
@@ -48,7 +62,8 @@ workflows:
           pub-type: production
           requires:
             - orb-tools/pack
-            - integration-test
+            # - integration-test
+            - aws-code-deploy/deploy
           context: orb-publisher
           filters:
             branches:
