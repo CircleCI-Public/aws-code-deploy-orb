@@ -9,7 +9,7 @@ filters: &filters
 jobs:
   integration-test:
     docker:
-      - image: cimg/python:3.10.7
+      - image: cimg/aws:2023.03
     steps:
       - checkout
       - aws-cli/setup:
@@ -33,9 +33,9 @@ jobs:
 workflows:
   test-deploy:
     jobs:
-      # - integration-test:
-      #     context: CPE-OIDC
-      #     filters: *filters
+      - integration-test:
+          context: CPE-OIDC
+          filters: *filters
       - aws-code-deploy/deploy:
           auth:
             - aws-cli/setup:
@@ -52,8 +52,8 @@ workflows:
           context: CPE-OIDC
           post-steps:
             - run: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID" --region "$AWS_DEFAULT_REGION" --profile "OIDC-User"
-          # requires:
-          #   - integration-test
+          requires:
+            - integration-test
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
@@ -62,7 +62,7 @@ workflows:
           pub-type: production
           requires:
             - orb-tools/pack
-            # - integration-test
+            - integration-test
             - aws-code-deploy/deploy
           context: orb-publisher
           filters:
