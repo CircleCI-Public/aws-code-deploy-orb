@@ -1,10 +1,8 @@
 description: >
-  "Ensures an application and deployment group exist then proceeds to
+  Ensures an application and deployment group exist then proceeds to
     bundle and upload an application revision to S3. Once uploaded this
-    job will finally create a deployment based on that revision."
+    job will finally create a deployment based on that revision.
 parameters:
-  executor:
-    type: executor
   application-name:
     description:
       "The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account."
@@ -58,14 +56,21 @@ parameters:
       "The name of an AWS profile to use with aws-cli commands"
     type: string
     default: 'default'
+  auth:
+    description: |
+      The authentication method used to access your AWS account. Import the aws-cli orb in your config and
+      provide the aws-cli/setup command to authenticate with your preferred method. View examples for more information.
+    type: steps
   region:
     type: string
     default: ${AWS_DEFAULT_REGION}
     description: >
       AWS region of CodeDeploy App. Defaults to environment variable ${AWS_DEFAULT_REGION}.
-executor: << parameters.executor >>
+docker:
+  - image: cimg/aws:2023.03
 steps:
   - checkout
+  - steps: << parameters.auth >>
   - create-application:
       application-name: << parameters.application-name >>
       arguments: << parameters.arguments >>
