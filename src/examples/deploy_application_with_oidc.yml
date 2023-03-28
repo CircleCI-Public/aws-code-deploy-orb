@@ -1,5 +1,6 @@
 description: >
-  Deploy an application to AWS CodeDeploy using OIDC authentication
+  Deploy an application to AWS CodeDeploy using OIDC authentication.
+  Import the aws-cli orb and authenticate using the aws-cli/setup command with a valid role-arn for OIDC authentication.
 usage:
   version: 2.1
   orbs:

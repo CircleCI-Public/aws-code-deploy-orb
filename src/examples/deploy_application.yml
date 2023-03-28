@@ -1,5 +1,6 @@
 description: >
-  Deploy an application to AWS CodeDeploy using static AWS keys for authentication
+  Deploy an application to AWS CodeDeploy using static AWS keys for authentication.
+  Import the aws-cli orb and authenticate using the aws-cli/setup command with static AWS keys stored as env_vars (AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY).
 usage:
   version: 2.1
   orbs:
