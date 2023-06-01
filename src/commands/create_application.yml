@@ -1,7 +1,7 @@
 description: >
   Creates an application.
 parameters:
-  application-name:
+  application_name:
     description:
       "The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account."
     type: string
@@ -9,7 +9,7 @@ parameters:
     description: If you wish to pass any additional arguments to the aws deploy command
     type: string
     default: ''
-  profile-name:
+  profile_name:
     description:
       "The name of an AWS profile to use with aws-cli commands"
     type: string
@@ -23,8 +23,8 @@ steps:
   - run:
       name: ensure-application-created
       environment:
-        ORB_EVAL_APPLICATION_NAME: << parameters.application-name >>
+        ORB_EVAL_APPLICATION_NAME: << parameters.application_name >>
         ORB_EVAL_ARGUMENTS: << parameters.arguments >>
-        ORB_VAL_PROFILE_NAME: << parameters.profile-name >>
+        ORB_VAL_PROFILE_NAME: << parameters.profile_name >>
         ORB_EVAL_REGION: << parameters.region >>
-      command: << include(scripts/create-application.sh) >>
+      command: << include(scripts/create_application.sh) >>

@@ -3,38 +3,38 @@ description: >
   bundle and upload an application revision to S3. Once uploaded this
   job will finally create a deployment based on that revision.
 parameters:
-  application-name:
+  application_name:
     description:
       "The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account."
     type: string
-  deployment-group:
+  deployment_group:
     description:
       "The name of a new deployment group for the specified application."
     type: string
-  deployment-config:
+  deployment_config:
     description:
       "Predefined deployment configuration name."
     type: enum
     enum: [ CodeDeployDefault.OneAtATime, CodeDeployDefault.HalfAtATime, CodeDeployDefault.AllAtOnce ]
     default: "CodeDeployDefault.OneAtATime"
-  service-role-arn:
+  service_role_arn:
     description:
       "The service role for a deployment group."
     type: string
-  bundle-source:
+  bundle_source:
     description:
       "The directory relative to your project to package up into an application revision."
     type: string
     default: "."
-  bundle-bucket:
+  bundle_bucket:
     description:
       "The s3 bucket where an application revision will be stored"
     type: string
-  bundle-key:
+  bundle_key:
     description:
       "A key under the s3 bucket where an application revision will be stored"
     type: string
-  bundle-type:
+  bundle_type:
     description:
       "The file type used for an application revision bundle. Currently defaults to 'zip'"
     type: string
@@ -43,15 +43,15 @@ parameters:
     description: If you wish to pass any additional arguments to the aws deploy command
     type: string
     default: ''
-  get-deployment-group-arguments:
-    description: If you wish to pass any additional arguments to the get-deployment-group command
+  get-deployment_group-arguments:
+    description: If you wish to pass any additional arguments to the get-deployment_group command
     type: string
     default: ''
-  deploy-bundle-arguments:
-    description: If you wish to pass any additional arguments to the deploy-bundle command
+  deploy_bundle-arguments:
+    description: If you wish to pass any additional arguments to the deploy_bundle command
     type: string
     default: ''
-  profile-name:
+  profile_name:
     description:
       "The name of an AWS profile to use with aws-cli commands"
     type: string
@@ -71,37 +71,37 @@ docker:
 steps:
   - checkout
   - steps: << parameters.auth >>
-  - create-application:
-      application-name: << parameters.application-name >>
+  - create_application:
+      application_name: << parameters.application_name >>
       arguments: << parameters.arguments >>
-      profile-name: << parameters.profile-name >>
+      profile_name: << parameters.profile_name >>
       region: << parameters.region >>
-  - create-deployment-group:
-      application-name: << parameters.application-name >>
-      deployment-group: << parameters.deployment-group >>
-      deployment-config: << parameters.deployment-config >>
-      service-role-arn: << parameters.service-role-arn >>
-      get-deployment-group-arguments: << parameters.get-deployment-group-arguments >>
+  - create_deployment_group:
+      application_name: << parameters.application_name >>
+      deployment_group: << parameters.deployment_group >>
+      deployment_config: << parameters.deployment_config >>
+      service_role_arn: << parameters.service_role_arn >>
+      get-deployment_group-arguments: << parameters.get-deployment_group-arguments >>
       arguments: << parameters.arguments >>
-      profile-name: << parameters.profile-name >>
+      profile_name: << parameters.profile_name >>
       region: << parameters.region >>
-  - push-bundle:
-      application-name: << parameters.application-name >>
-      bundle-source: << parameters.bundle-source >>
-      bundle-bucket: << parameters.bundle-bucket >>
-      bundle-key: << parameters.bundle-key >>
-      bundle-type: << parameters.bundle-type >>
+  - push_bundle:
+      application_name: << parameters.application_name >>
+      bundle_source: << parameters.bundle_source >>
+      bundle_bucket: << parameters.bundle_bucket >>
+      bundle_key: << parameters.bundle_key >>
+      bundle_type: << parameters.bundle_type >>
       arguments: << parameters.arguments >>
-      profile-name: << parameters.profile-name >>
+      profile_name: << parameters.profile_name >>
       region: << parameters.region >>
-  - deploy-bundle:
-      application-name: << parameters.application-name >>
-      deployment-group: << parameters.deployment-group >>
-      deployment-config: << parameters.deployment-config >>
-      bundle-bucket: << parameters.bundle-bucket >>
-      bundle-key: << parameters.bundle-key >>
-      bundle-type: << parameters.bundle-type >>
-      get-deployment-group-arguments: << parameters.get-deployment-group-arguments >>
-      deploy-bundle-arguments: << parameters.deploy-bundle-arguments >>
-      profile-name: << parameters.profile-name >>
+  - deploy_bundle:
+      application_name: << parameters.application_name >>
+      deployment_group: << parameters.deployment_group >>
+      deployment_config: << parameters.deployment_config >>
+      bundle_bucket: << parameters.bundle_bucket >>
+      bundle_key: << parameters.bundle_key >>
+      bundle_type: << parameters.bundle_type >>
+      get-deployment_group-arguments: << parameters.get-deployment_group-arguments >>
+      deploy_bundle-arguments: << parameters.deploy_bundle-arguments >>
+      profile_name: << parameters.profile_name >>
       region: << parameters.region >>

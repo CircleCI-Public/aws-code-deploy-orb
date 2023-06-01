@@ -15,8 +15,8 @@ usage:
             auth:
               # Configure aws credentials with static keys stored as env_vars (AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY)
               - aws-cli/setup
-            application-name: myApplication
-            deployment-group: myDeploymentGroup
-            service-role-arn: myDeploymentGroupRoleARN
-            bundle-bucket: myApplicationS3Bucket
-            bundle-key: myS3BucketKey
+            application_name: myApplication
+            deployment_group: myDeploymentGroup
+            service_role_arn: myDeploymentGroupRoleARN
+            bundle_bucket: myApplicationS3Bucket
+            bundle_key: myS3BucketKey
