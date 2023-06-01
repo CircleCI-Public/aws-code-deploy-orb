@@ -1,14 +1,17 @@
 #!/bin/sh
-ORB_EVAL_APPLICATION_NAME="$(eval echo "${ORB_EVAL_APPLICATION_NAME}")"
-ORB_EVAL_DEPLOYMENT_GROUP="$(eval echo "${ORB_EVAL_DEPLOYMENT_GROUP}")"
-ORB_EVAL_REGION="$(eval echo "${ORB_EVAL_REGION}")"
+ORB_EVAL_APPLICATION_NAME="$(circleci env subst "${ORB_EVAL_APPLICATION_NAME}")"
+ORB_EVAL_DEPLOYMENT_GROUP="$(circleci env subst "${ORB_EVAL_DEPLOYMENT_GROUP}")"
+ORB_EVAL_REGION="$(circleci env subst "${ORB_EVAL_REGION}")"
+ORB_EVAL_ARGUMENTS="$(circleci env subst "${ORB_EVAL_ARGUMENTS}")"
+ORB_EVAL_PROFILE_NAME="$(circleci env subst "${ORB_EVAL_PROFILE_NAME}")"
+ORB_EVAL_SERVICE_ROLE_ARN="$(circleci env subst "${ORB_EVAL_SERVICE_ROLE_ARN}")"
 
 set +e
 aws deploy get-deployment-group \
 --application-name "${ORB_EVAL_APPLICATION_NAME}" \
 --deployment-group-name "${ORB_EVAL_DEPLOYMENT_GROUP}" \
 --region "${ORB_EVAL_REGION}" \
---profile "${ORB_VAL_PROFILE_NAME}" "${ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}"
+--profile "${ORB_EVAL_PROFILE_NAME}" "${ORB_EVAL_GET_DEPLOYMENT_GROUP_ARGUMENTS}"
 
 if $? -ne 0; then
   set -e
@@ -17,7 +20,7 @@ if $? -ne 0; then
   --application-name  "${ORB_EVAL_APPLICATION_NAME}" \
   --deployment-group-name "${ORB_EVAL_DEPLOYMENT_GROUP}" \
   --deployment-config-name "${ORB_VAL_DEPLOYMENT_CONFIG}" \
-    --service-role-arn "${ORB_VAL_SERVICE_ROLE_ARN}" "${ORB_VAL_ARGUMENTS}"
+    --service-role-arn "${ORB_EVAL_SERVICE_ROLE_ARN}" "${ORB_EVAL_ARGUMENTS}"
 else
   set -e
   echo "Deployment group named ${ORB_EVAL_DEPLOYMENT_GROUP} already exists. Skipping creation."

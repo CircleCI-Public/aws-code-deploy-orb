@@ -24,7 +24,7 @@ steps:
       name: ensure-application-created
       environment:
         ORB_EVAL_APPLICATION_NAME: << parameters.application-name >>
-        ORB_VAL_ARGUMENTS: << parameters.arguments >>
+        ORB_EVAL_ARGUMENTS: << parameters.arguments >>
         ORB_VAL_PROFILE_NAME: << parameters.profile-name >>
         ORB_EVAL_REGION: << parameters.region >>
       command: << include(scripts/create-application.sh) >>
