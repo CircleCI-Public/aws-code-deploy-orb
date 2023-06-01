@@ -81,7 +81,7 @@ steps:
       deployment_group: << parameters.deployment_group >>
       deployment_config: << parameters.deployment_config >>
       service_role_arn: << parameters.service_role_arn >>
-      get_deployment_group_arguments: << parameters.get-deployment_group-arguments >>
+      get_deployment_group_arguments: << parameters.get_deployment_group_arguments >>
       arguments: << parameters.arguments >>
       profile_name: << parameters.profile_name >>
       region: << parameters.region >>
