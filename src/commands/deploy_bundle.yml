@@ -28,11 +28,12 @@ parameters:
       "The file type used for an application revision bundle. Currently defaults to 'zip'"
     type: string
     default: "zip"
-  get-deployment_group-arguments:
+  get_deployment_group_arguments
+:
     description: If you wish to pass any additional arguments to the get-deployment_group command
     type: string
     default: ''
-  deploy_bundle-arguments:
+  deploy_bundle_arguments:
     description:
       "If you wish to pass any additional arguments to the aws create-deployment command"
     type: string
@@ -57,8 +58,9 @@ steps:
         ORB_EVAL_BUNDLE_BUCKET: << parameters.bundle_bucket >>
         ORB_EVAL_BUNDLE_KEY: << parameters.bundle_key >>
         ORB_EVAL_BUNDLE_TYPE: << parameters.bundle_type >>
-        ORB_EVAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get-deployment_group-arguments >>
-        ORB_EVAL_DEPLOY_BUNDLE_ARGUMENTS: << parameters.deploy_bundle-arguments >>
+        ORB_EVAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get_deployment_group_arguments
+ >>
+        ORB_EVAL_DEPLOY_BUNDLE_ARGUMENTS: << parameters.deploy_bundle_arguments >>
         ORB_EVAL_PROFILE_NAME: << parameters.profile_name >>
         ORB_EVAL_REGION: << parameters.region >>
       command: << include(scripts/deploy_bundle.sh) >>
