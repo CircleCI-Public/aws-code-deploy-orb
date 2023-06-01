@@ -23,8 +23,7 @@ parameters:
     description: If you wish to pass any additional arguments to the create_deployment_group command
     type: string
     default: ''
-  get_deployment_group_arguments
-:
+  get_deployment_group_arguments:
     description: If you wish to pass any additional arguments to the get-deployment_group command
     type: string
     default: ''
@@ -47,8 +46,7 @@ steps:
         ORB_VAL_DEPLOYMENT_CONFIG: << parameters.deployment_config >>
         ORB_EVAL_SERVICE_ROLE_ARN: << parameters.service_role_arn >>
         ORB_EVAL_ARGUMENTS: << parameters.arguments >>
-        ORB_EVAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get_deployment_group_arguments
- >>
+        ORB_EVAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get_deployment_group_arguments>>
         ORB_EVAL_PROFILE_NAME: << parameters.profile_name >>
         ORB_EVAL_REGION: << parameters.region >>
       command: << include(scripts/create_deployment_group.sh) >>
