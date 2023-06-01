@@ -45,7 +45,7 @@ workflows:
           auth:
             - aws-cli/setup:
                 role_arn: arn:aws:iam::122211685980:role/CPE_CODE_DEPLOY_OIDC_TEST
-                role_session-name: "Test-session"
+                role_session_name: "Test-session"
                 profile_name: "OIDC-User"
           profile_name: OIDC-User
           application_name: CodeDeployOrb_App
