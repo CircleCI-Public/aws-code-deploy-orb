@@ -44,9 +44,9 @@ steps:
         ORB_EVAL_APPLICATION_NAME: << parameters.application-name >>
         ORB_EVAL_DEPLOYMENT_GROUP: << parameters.deployment-group >>
         ORB_VAL_DEPLOYMENT_CONFIG: << parameters.deployment-config >>
-        ORB_VAL_SERVICE_ROLE_ARN: << parameters.service-role-arn >>
-        ORB_VAL_ARGUMENTS: << parameters.arguments >>
-        ORB_VAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get-deployment-group-arguments >>
-        ORB_VAL_PROFILE_NAME: << parameters.profile-name >>
+        ORB_EVAL_SERVICE_ROLE_ARN: << parameters.service-role-arn >>
+        ORB_EVAL_ARGUMENTS: << parameters.arguments >>
+        ORB_EVAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get-deployment-group-arguments >>
+        ORB_EVAL_PROFILE_NAME: << parameters.profile-name >>
         ORB_EVAL_REGION: << parameters.region >>
       command: << include(scripts/create-deployment-group.sh) >>

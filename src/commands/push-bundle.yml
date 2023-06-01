@@ -42,11 +42,11 @@ steps:
       name: push-bundle
       environment:
         ORB_EVAL_APPLICATION_NAME: << parameters.application-name >>
-        ORB_VAL_BUNDLE_SOURCE: << parameters.bundle-source >>
+        ORB_EVAL_BUNDLE_SOURCE: << parameters.bundle-source >>
         ORB_EVAL_BUNDLE_BUCKET: << parameters.bundle-bucket >>
         ORB_EVAL_BUNDLE_KEY: << parameters.bundle-key >>
-        ORB_VAL_BUNDLE_TYPE: << parameters.bundle-type >>
-        ORB_VAL_ARGUMENTS: << parameters.arguments >>
-        ORB_VAL_PROFILE_NAME: << parameters.profile-name >>
+        ORB_EVAL_BUNDLE_TYPE: << parameters.bundle-type >>
+        ORB_EVAL_ARGUMENTS: << parameters.arguments >>
+        ORB_EVAL_PROFILE_NAME: << parameters.profile-name >>
         ORB_EVAL_REGION: << parameters.region >>
       command: << include(scripts/push-bundle.sh) >>
