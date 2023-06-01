@@ -43,7 +43,7 @@ parameters:
     description: If you wish to pass any additional arguments to the aws deploy command
     type: string
     default: ''
-  get_deployment_group-arguments:
+  get_deployment_group_arguments:
     description: If you wish to pass any additional arguments to the get-deployment_group command
     type: string
     default: ''
@@ -81,7 +81,7 @@ steps:
       deployment_group: << parameters.deployment_group >>
       deployment_config: << parameters.deployment_config >>
       service_role_arn: << parameters.service_role_arn >>
-      get_deployment_group-arguments: << parameters.get-deployment_group-arguments >>
+      get_deployment_group_arguments: << parameters.get-deployment_group-arguments >>
       arguments: << parameters.arguments >>
       profile_name: << parameters.profile_name >>
       region: << parameters.region >>
@@ -101,7 +101,7 @@ steps:
       bundle_bucket: << parameters.bundle_bucket >>
       bundle_key: << parameters.bundle_key >>
       bundle_type: << parameters.bundle_type >>
-      get_deployment_group-arguments: << parameters.get_deployment_group-arguments >>
+      get_deployment_group_arguments: << parameters.get_deployment_group_arguments >>
       deploy_bundle_arguments: << parameters.deploy_bundle_arguments >>
       profile_name: << parameters.profile_name >>
       region: << parameters.region >>
