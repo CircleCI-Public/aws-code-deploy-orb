@@ -24,7 +24,7 @@ parameters:
     type: string
     default: ''
   get_deployment_group_arguments:
-    description: If you wish to pass any additional arguments to the get_deployment_group command
+    description: If you wish to pass any additional arguments to the get-deployment-group command
     type: string
     default: ''
   profile_name:
