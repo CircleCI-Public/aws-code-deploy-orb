@@ -1,43 +1,43 @@
 description: |
   Deploy from a bundle and wait until the deployment has successfully completed.
 parameters:
-  application-name:
+  application_name:
     description:
       "The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account."
     type: string
-  deployment-group:
+  deployment_group:
     description:
       "The name of a new deployment group for the specified application."
     type: string
-  deployment-config:
+  deployment_config:
     description:
       "Predefined deployment configuration name."
     type: enum
     enum: [ CodeDeployDefault.OneAtATime, CodeDeployDefault.HalfAtATime, CodeDeployDefault.AllAtOnce ]
     default: "CodeDeployDefault.OneAtATime"
-  bundle-bucket:
+  bundle_bucket:
     description:
       "The s3 bucket where an application revision will be stored"
     type: string
-  bundle-key:
+  bundle_key:
     description:
       "A key under the s3 bucket where an application revision will be stored"
     type: string
-  bundle-type:
+  bundle_type:
     description:
       "The file type used for an application revision bundle. Currently defaults to 'zip'"
     type: string
     default: "zip"
-  get-deployment-group-arguments:
+  get_deployment_group_arguments:
     description: If you wish to pass any additional arguments to the get-deployment-group command
     type: string
     default: ''
-  deploy-bundle-arguments:
+  deploy_bundle_arguments:
     description:
       "If you wish to pass any additional arguments to the aws create-deployment command"
     type: string
     default: ''
-  profile-name:
+  profile_name:
     description:
       "The name of an AWS profile to use with aws-cli commands"
     type: string
@@ -49,16 +49,16 @@ parameters:
       AWS region of CodeDeploy App. Defaults to environment variable ${AWS_DEFAULT_REGION}.
 steps:
   - run:
-      name: deploy-bundle
+      name: deploy_bundle
       environment:
-        ORB_EVAL_APPLICATION_NAME: << parameters.application-name >>
-        ORB_EVAL_DEPLOYMENT_GROUP: << parameters.deployment-group >>
-        ORB_VAL_DEPLOYMENT_CONFIG: << parameters.deployment-config >>
-        ORB_EVAL_BUNDLE_BUCKET: << parameters.bundle-bucket >>
-        ORB_EVAL_BUNDLE_KEY: << parameters.bundle-key >>
-        ORB_EVAL_BUNDLE_TYPE: << parameters.bundle-type >>
-        ORB_EVAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get-deployment-group-arguments >>
-        ORB_EVAL_DEPLOY_BUNDLE_ARGUMENTS: << parameters.deploy-bundle-arguments >>
-        ORB_EVAL_PROFILE_NAME: << parameters.profile-name >>
+        ORB_EVAL_APPLICATION_NAME: << parameters.application_name >>
+        ORB_EVAL_DEPLOYMENT_GROUP: << parameters.deployment_group >>
+        ORB_VAL_DEPLOYMENT_CONFIG: << parameters.deployment_config >>
+        ORB_EVAL_BUNDLE_BUCKET: << parameters.bundle_bucket >>
+        ORB_EVAL_BUNDLE_KEY: << parameters.bundle_key >>
+        ORB_EVAL_BUNDLE_TYPE: << parameters.bundle_type >>
+        ORB_EVAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get_deployment_group_arguments >>
+        ORB_EVAL_DEPLOY_BUNDLE_ARGUMENTS: << parameters.deploy_bundle_arguments >>
+        ORB_EVAL_PROFILE_NAME: << parameters.profile_name >>
         ORB_EVAL_REGION: << parameters.region >>
-      command: << include(scripts/deploy-bundle.sh) >>
+      command: << include(scripts/deploy_bundle.sh) >>

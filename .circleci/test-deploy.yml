@@ -1,11 +1,16 @@
 version: 2.1
 orbs:
-  aws-code-deploy: circleci/aws-code-deploy@dev:<<pipeline.git.revision>>
-  orb-tools: circleci/orb-tools@11.6
-  aws-cli: circleci/aws-cli@3.1
+  orb-tools: circleci/orb-tools@12.0
+  aws-cli: circleci/aws-cli@4.0
+  aws-code-deploy: {}
 filters: &filters
   tags:
     only: /.*/
+release-filters: &release-filters
+  branches:
+    ignore: /.*/
+  tags:
+    only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
 jobs:
   integration-test:
     docker:
@@ -13,23 +18,23 @@ jobs:
     steps:
       - checkout
       - aws-cli/setup:
-          role-arn: "arn:aws:iam::122211685980:role/CPE_CODE_DEPLOY_OIDC_TEST"
-          profile-name: OIDC-User
+          role_arn: "arn:aws:iam::122211685980:role/CPE_CODE_DEPLOY_OIDC_TEST"
+          profile_name: OIDC-User
       - run:
           name: Start Instance
           command: aws ec2 start-instances --instance-ids "$AWS_CD_EC2_ID" --region "$AWS_DEFAULT_REGION" --profile "OIDC-User"
-      - aws-code-deploy/push-bundle:
-          application-name: CodeDeployOrb_App
-          bundle-source: ./sample_app
-          bundle-bucket: aws-codedeploy-orb-test
-          bundle-key: SampleApp_Linux
-          profile-name: OIDC-User
-      - aws-code-deploy/deploy-bundle:
-          application-name: CodeDeployOrb_App
-          deployment-group: CodeDeployOrb_App_Group
-          bundle-bucket: aws-codedeploy-orb-test
-          bundle-key: SampleApp_Linux
-          profile-name: OIDC-User
+      - aws-code-deploy/push_bundle:
+          application_name: CodeDeployOrb_App
+          bundle_source: ./sample_app
+          bundle_bucket: aws-codedeploy-orb-test
+          bundle_key: SampleApp_Linux
+          profile_name: OIDC-User
+      - aws-code-deploy/deploy_bundle:
+          application_name: CodeDeployOrb_App
+          deployment_group: CodeDeployOrb_App_Group
+          bundle_bucket: aws-codedeploy-orb-test
+          bundle_key: SampleApp_Linux
+          profile_name: OIDC-User
 workflows:
   test-deploy:
     jobs:
@@ -39,34 +44,28 @@ workflows:
       - aws-code-deploy/deploy:
           auth:
             - aws-cli/setup:
-                role-arn: arn:aws:iam::122211685980:role/CPE_CODE_DEPLOY_OIDC_TEST
-                role-session-name: "Test-session"
-                profile-name: "OIDC-User"
-          profile-name: OIDC-User
-          application-name: CodeDeployOrb_App
-          deployment-group: CodeDeployOrb_App_Group
-          service-role-arn: arn:aws:iam::122211685980:role/CodeDeployServiceRole
-          bundle-source: ./sample_app
-          bundle-bucket: aws-codedeploy-orb-test
-          bundle-key: SampleApp_Linux
+                role_arn: arn:aws:iam::122211685980:role/CPE_CODE_DEPLOY_OIDC_TEST
+                role_session_name: "Test-session"
+                profile_name: "OIDC-User"
+          profile_name: OIDC-User
+          application_name: CodeDeployOrb_App
+          deployment_group: CodeDeployOrb_App_Group
+          service_role_arn: arn:aws:iam::122211685980:role/CodeDeployServiceRole
+          bundle_source: ./sample_app
+          bundle_bucket: aws-codedeploy-orb-test
+          bundle_key: SampleApp_Linux
           context: CPE-OIDC
           post-steps:
             - run: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID" --region "$AWS_DEFAULT_REGION" --profile "OIDC-User"
           requires:
             - integration-test
       - orb-tools/pack:
-          filters: *filters
+          filters: *release-filters
       - orb-tools/publish:
-          orb-name: circleci/aws-code-deploy
-          vcs-type: << pipeline.project.type >>
-          pub-type: production
-          requires:
-            - orb-tools/pack
-            - integration-test
-            - aws-code-deploy/deploy
+          orb_name: circleci/aws-code-deploy
+          vcs_type: << pipeline.project.type >>
+          pub_type: production
+          enable_pr_comment: true
+          requires: [ orb-tools/pack, integration-test, aws-code-deploy/deploy ]
           context: orb-publisher
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+          filters: *release-filters

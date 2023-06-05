@@ -17,11 +17,11 @@ usage:
               - aws-cli/setup:
                   profile: "OIDC-USER"
                   role-arn: "arn:aws:iam::123456789012:role/VALID_OIDC_CODEDEPLOY_ROLE"
-            application-name: myApplication
-            deployment-group: myDeploymentGroup
-            service-role-arn: myDeploymentGroupRoleARN
-            bundle-bucket: myApplicationS3Bucket
-            bundle-key: myS3BucketKey
+            application_name: myApplication
+            deployment_group: myDeploymentGroup
+            service_role_arn: myDeploymentGroupRoleARN
+            bundle_bucket: myApplicationS3Bucket
+            bundle_key: myS3BucketKey
             # Must use same profile configured in aws-cli/setup command
             profile: "OIDC-USER"
             # must use valid CircleCI context for OIDC authentication
