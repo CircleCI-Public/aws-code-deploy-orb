@@ -51,14 +51,14 @@ steps:
   - run:
       name: deploy_bundle
       environment:
-        ORB_EVAL_APPLICATION_NAME: << parameters.application_name >>
-        ORB_EVAL_DEPLOYMENT_GROUP: << parameters.deployment_group >>
-        ORB_VAL_DEPLOYMENT_CONFIG: << parameters.deployment_config >>
-        ORB_EVAL_BUNDLE_BUCKET: << parameters.bundle_bucket >>
-        ORB_EVAL_BUNDLE_KEY: << parameters.bundle_key >>
-        ORB_EVAL_BUNDLE_TYPE: << parameters.bundle_type >>
-        ORB_EVAL_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get_deployment_group_arguments >>
-        ORB_EVAL_DEPLOY_BUNDLE_ARGUMENTS: << parameters.deploy_bundle_arguments >>
-        ORB_EVAL_PROFILE_NAME: << parameters.profile_name >>
-        ORB_EVAL_REGION: << parameters.region >>
+        ORB_STR_APPLICATION_NAME: << parameters.application_name >>
+        ORB_STR_DEPLOYMENT_GROUP: << parameters.deployment_group >>
+        ORB_STR_DEPLOYMENT_CONFIG: << parameters.deployment_config >>
+        ORB_STR_BUNDLE_BUCKET: << parameters.bundle_bucket >>
+        ORB_STR_BUNDLE_KEY: << parameters.bundle_key >>
+        ORB_STR_BUNDLE_TYPE: << parameters.bundle_type >>
+        ORB_STR_GET_DEPLOYMENT_GROUP_ARGUMENTS: << parameters.get_deployment_group_arguments >>
+        ORB_STR_DEPLOY_BUNDLE_ARGUMENTS: << parameters.deploy_bundle_arguments >>
+        ORB_STR_PROFILE_NAME: << parameters.profile_name >>
+        ORB_STR_REGION: << parameters.region >>
       command: << include(scripts/deploy_bundle.sh) >>
