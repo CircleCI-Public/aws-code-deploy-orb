@@ -22,14 +22,16 @@ jobs:
           profile_name: OIDC-User
       - run:
           name: Start Instance
-          command: aws ec2 start-instances --instance-ids "$AWS_CD_EC2_ID" --region "$AWS_DEFAULT_REGION" --profile "OIDC-User"
+          command: aws ec2 start-instances --instance-ids "$AWS_CD_EC2_ID" --region "us-west-1" --profile "OIDC-User"
       - aws-code-deploy/push_bundle:
+          region: "us-west-1"
           application_name: CodeDeployOrb_App
           bundle_source: ./sample_app
           bundle_bucket: aws-codedeploy-orb-test
           bundle_key: SampleApp_Linux
           profile_name: OIDC-User
       - aws-code-deploy/deploy_bundle:
+          region: "us-west-1"
           application_name: CodeDeployOrb_App
           deployment_group: CodeDeployOrb_App_Group
           bundle_bucket: aws-codedeploy-orb-test
@@ -47,6 +49,7 @@ workflows:
                 role_arn: arn:aws:iam::122211685980:role/CPE_CODE_DEPLOY_OIDC_TEST
                 role_session_name: "Test-session"
                 profile_name: "OIDC-User"
+          region: "us-west-1"
           profile_name: OIDC-User
           application_name: CodeDeployOrb_App
           deployment_group: CodeDeployOrb_App_Group
@@ -56,7 +59,7 @@ workflows:
           bundle_key: SampleApp_Linux
           context: CPE-OIDC
           post-steps:
-            - run: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID" --region "$AWS_DEFAULT_REGION" --profile "OIDC-User"
+            - run: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID" --region "us-west-1" --profile "OIDC-User"
           requires:
             - integration-test
       - orb-tools/pack:
