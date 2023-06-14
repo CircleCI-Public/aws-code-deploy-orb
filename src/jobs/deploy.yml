@@ -66,8 +66,11 @@ parameters:
     default: ${AWS_DEFAULT_REGION}
     description: >
       AWS region of CodeDeploy App. Defaults to environment variable ${AWS_DEFAULT_REGION}.
-docker:
-  - image: cimg/aws:2023.03
+  executor:
+    description: The executor to use for this job. By default, this will use the "default" executor provided by this orb.
+    type: executor
+    default: default
+executor: << parameters.executor >>
 steps:
   - checkout
   - steps: << parameters.auth >>
