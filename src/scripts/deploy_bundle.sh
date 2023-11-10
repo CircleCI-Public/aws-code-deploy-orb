@@ -8,23 +8,35 @@ ORB_STR_GET_DEPLOYMENT_GROUP_ARGUMENTS="$(circleci env subst "${ORB_STR_GET_DEPL
 ORB_STR_BUNDLE_TYPE="$(circleci env subst "${ORB_STR_BUNDLE_TYPE}")"
 ORB_STR_DEPLOY_BUNDLE_ARGUMENTS="$(circleci env subst "${ORB_STR_DEPLOY_BUNDLE_ARGUMENTS}")"
 
-if [ -n "${ORB_STR_GET_DEPLOYMENT_GROUP_ARGUMENTS}" ]; then 
+if [ -n "${ORB_STR_GET_DEPLOYMENT_GROUP_ARGUMENTS}" ]; then
   set -- "$@" "${ORB_STR_GET_DEPLOYMENT_GROUP_ARGUMENTS}"
 fi
 
 if [ -n "${ORB_STR_DEPLOY_BUNDLE_ARGUMENTS}" ]; then
   set -- "$@" "${ORB_STR_DEPLOY_BUNDLE_ARGUMENTS}"
-fi 
+fi
 
-ID=$(aws deploy create-deployment \
-    --application-name "${ORB_STR_APPLICATION_NAME}" \
-    --deployment-group-name "${ORB_STR_DEPLOYMENT_GROUP}" \
-    --deployment-config-name "${ORB_STR_DEPLOYMENT_CONFIG}" \
-    --region "${ORB_STR_REGION}" \
-    --s3-location bucket="${ORB_STR_BUNDLE_BUCKET}",bundleType="${ORB_STR_BUNDLE_TYPE}",key="${ORB_STR_BUNDLE_KEY}"."${ORB_STR_BUNDLE_TYPE}" \
-    --profile "${ORB_STR_PROFILE_NAME}" \
-    --output text \
-    --query '[deploymentId]' "${ORB_STR_DEPLOY_BUNDLE_ARGUMENTS}")
+if [ -n "${ORB_STR_DEPLOYMENT_CONFIG}" ]; then
+  ID=$(aws deploy create-deployment \
+      --application-name "${ORB_STR_APPLICATION_NAME}" \
+      --deployment-group-name "${ORB_STR_DEPLOYMENT_GROUP}" \
+      --region "${ORB_STR_REGION}" \
+      --s3-location bucket="${ORB_STR_BUNDLE_BUCKET}",bundleType="${ORB_STR_BUNDLE_TYPE}",key="${ORB_STR_BUNDLE_KEY}"."${ORB_STR_BUNDLE_TYPE}" \
+      --profile "${ORB_STR_PROFILE_NAME}" \
+      --output text \
+      --query '[deploymentId]' "${ORB_STR_DEPLOY_BUNDLE_ARGUMENTS}")
+else
+  ID=$(aws deploy create-deployment \
+      --application-name "${ORB_STR_APPLICATION_NAME}" \
+      --deployment-group-name "${ORB_STR_DEPLOYMENT_GROUP}" \
+      --deployment-config-name "${ORB_STR_DEPLOYMENT_CONFIG}" \
+      --region "${ORB_STR_REGION}" \
+      --s3-location bucket="${ORB_STR_BUNDLE_BUCKET}",bundleType="${ORB_STR_BUNDLE_TYPE}",key="${ORB_STR_BUNDLE_KEY}"."${ORB_STR_BUNDLE_TYPE}" \
+      --profile "${ORB_STR_PROFILE_NAME}" \
+      --output text \
+      --query '[deploymentId]' "${ORB_STR_DEPLOY_BUNDLE_ARGUMENTS}")
+fi
+
 STATUS=$(aws deploy get-deployment \
     --deployment-id "$ID" \
     --output text \
