@@ -12,9 +12,8 @@ parameters:
   deployment_config:
     description:
       "Predefined deployment configuration name."
-    type: enum
-    enum: [ CodeDeployDefault.OneAtATime, CodeDeployDefault.HalfAtATime, CodeDeployDefault.AllAtOnce ]
-    default: "CodeDeployDefault.OneAtATime"
+    type: string
+    default: ''
   bundle_bucket:
     description:
       "The s3 bucket where an application revision will be stored"
