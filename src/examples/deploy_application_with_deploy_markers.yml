@@ -1,0 +1,59 @@
+description: >
+  Deploy an application to AWS CodeDeploy with CircleCI deploy markers.
+  Four modes are available via the deploy_markers_mode parameter:
+    OFF             - no deploy markers
+    LOG             - log a deployment event after the CodeDeploy deployment completes
+    PLAN            - create a planned marker before the deployment; caller manages status updates
+    PLAN_AND_UPDATE - full lifecycle: plan → running → success/failed (default)
+
+usage:
+  version: 2.1
+
+  orbs:
+    aws-code-deploy: circleci/aws-code-deploy@4.0
+    aws-cli: circleci/aws-cli@4.0
+
+  workflows:
+    deploy:
+      jobs:
+        # LOG mode — log a deployment event after the CodeDeploy deployment completes
+        - aws-code-deploy/deploy:
+            name: deploy-log
+            application_name: my-app
+            deployment_group: my-deployment-group
+            service_role_arn: ${AWS_CODEDEPLOY_SERVICE_ROLE_ARN}
+            bundle_bucket: my-app-s3-bucket
+            bundle_key: my-app-bundle
+            deploy_markers_mode: LOG
+            deploy_markers_target_version: ${CIRCLE_SHA1:0:7}
+            auth:
+              - aws-cli/setup:
+                  role_arn: ${AWS_ROLE_ARN}
+
+        # PLAN mode — create a planned marker before deploy; status updates are left to the caller
+        - aws-code-deploy/deploy:
+            name: deploy-plan
+            application_name: my-app
+            deployment_group: my-deployment-group
+            service_role_arn: ${AWS_CODEDEPLOY_SERVICE_ROLE_ARN}
+            bundle_bucket: my-app-s3-bucket
+            bundle_key: my-app-bundle
+            deploy_markers_mode: PLAN
+            deploy_markers_target_version: ${CIRCLE_SHA1:0:7}
+            auth:
+              - aws-cli/setup:
+                  role_arn: ${AWS_ROLE_ARN}
+
+        # PLAN_AND_UPDATE mode — full lifecycle managed by the orb
+        - aws-code-deploy/deploy:
+            name: deploy-full
+            application_name: my-app
+            deployment_group: my-deployment-group
+            service_role_arn: ${AWS_CODEDEPLOY_SERVICE_ROLE_ARN}
+            bundle_bucket: my-app-s3-bucket
+            bundle_key: my-app-bundle
+            deploy_markers_mode: PLAN_AND_UPDATE
+            deploy_markers_target_version: ${CIRCLE_SHA1:0:7}
+            auth:
+              - aws-cli/setup:
+                  role_arn: ${AWS_ROLE_ARN}

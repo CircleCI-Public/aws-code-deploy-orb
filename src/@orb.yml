@@ -6,3 +6,6 @@ description: >
 display:
   home_url: "https://aws.amazon.com/codedeploy/"
   source_url: "https://github.com/CircleCI-Public/aws-code-deploy-orb"
+
+orbs:
+  deploys: circleci/deploys@1.0
