@@ -75,6 +75,20 @@ usage:
               - aws-cli/setup:
                   role_arn: ${AWS_ROLE_ARN}
 
+        # PLAN mode — create a planned marker before deploy; status updates are left to the caller
+        - aws-code-deploy/deploy:
+            name: deploy-plan
+            application_name: my-app
+            deployment_group: my-deployment-group
+            service_role_arn: ${AWS_CODEDEPLOY_SERVICE_ROLE_ARN}
+            bundle_bucket: my-app-s3-bucket
+            bundle_key: my-app-bundle
+            deploy_markers_mode: PLAN
+            deploy_markers_target_version: '${CIRCLE_SHA1}'
+            auth:
+              - aws-cli/setup:
+                  role_arn: ${AWS_ROLE_ARN}
+
         # Opting out — disable deploy markers with deploy_markers_mode: OFF
         - aws-code-deploy/deploy:
             name: deploy-no-markers
