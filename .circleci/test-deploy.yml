@@ -42,7 +42,11 @@ workflows:
     jobs:
       - integration-test:
           context: CPE-OIDC
-          filters: *filters
+          filters:
+            branches:
+              ignore: feat/deploy-markers
+            tags:
+              only: /.*/
       - aws-code-deploy/deploy:
           auth:
             - aws-cli/setup:
@@ -62,6 +66,11 @@ workflows:
             - run: aws ec2 stop-instances --instance-ids "$AWS_CD_EC2_ID" --region "us-west-1" --profile "OIDC-User"
           requires:
             - integration-test
+          filters:
+            branches:
+              ignore: feat/deploy-markers
+            tags:
+              only: /.*/
       - orb-tools/pack:
           filters: *release-filters
       - orb-tools/publish:
