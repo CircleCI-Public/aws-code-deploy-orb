@@ -1,0 +1,89 @@
+description: >
+  Deploy an application to AWS CodeDeploy with CircleCI deploy markers (enabled by default via PLAN_AND_UPDATE mode).
+  The default PLAN_AND_UPDATE lifecycle creates a planned marker before the deploy, marks it as
+  running when the deploy starts, and automatically sets it to success or failed when the job
+  completes — no extra configuration required.
+
+  This example shows the optional parameters available to customize deploy marker behavior:
+    deploy_markers_target_version  - version label shown in the CircleCI Deploys UI (defaults to short commit SHA)
+    deploy_markers_deploy_name     - unique identifier for this deployment; defaults to the workflow job ID,
+                                     which is already unique per execution, but can be set explicitly for
+                                     a more readable name in the CircleCI Deploys UI
+    deploy_markers_mode            - override the default PLAN_AND_UPDATE mode when needed:
+                                       LOG             - log a deployment event after the deploy (no planned marker)
+                                       PLAN            - create a planned marker before deploy; caller manages status updates
+                                       OFF             - disable deploy markers entirely
+
+usage:
+  version: 2.1
+
+  orbs:
+    aws-code-deploy: circleci/aws-code-deploy@4.0
+    aws-cli: circleci/aws-cli@4.0
+
+  workflows:
+    deploy:
+      jobs:
+        # Default usage — deploy markers are on (PLAN_AND_UPDATE), target version defaults to short commit SHA
+        - aws-code-deploy/deploy:
+            name: deploy-app
+            application_name: my-app
+            deployment_group: my-deployment-group
+            service_role_arn: ${AWS_CODEDEPLOY_SERVICE_ROLE_ARN}
+            bundle_bucket: my-app-s3-bucket
+            bundle_key: my-app-bundle
+            auth:
+              - aws-cli/setup:
+                  role_arn: ${AWS_ROLE_ARN}
+
+        # Multiple deploys in the same workflow — optionally set deploy_markers_deploy_name for clearer identification
+        - aws-code-deploy/deploy:
+            name: deploy-app-a
+            application_name: my-app-a
+            deployment_group: my-deployment-group
+            service_role_arn: ${AWS_CODEDEPLOY_SERVICE_ROLE_ARN}
+            bundle_bucket: my-app-s3-bucket
+            bundle_key: my-app-a-bundle
+            deploy_markers_target_version: '${CIRCLE_SHA1}'
+            deploy_markers_deploy_name: deploy-app-a
+            auth:
+              - aws-cli/setup:
+                  role_arn: ${AWS_ROLE_ARN}
+        - aws-code-deploy/deploy:
+            name: deploy-app-b
+            application_name: my-app-b
+            deployment_group: my-deployment-group
+            service_role_arn: ${AWS_CODEDEPLOY_SERVICE_ROLE_ARN}
+            bundle_bucket: my-app-s3-bucket
+            bundle_key: my-app-b-bundle
+            deploy_markers_target_version: '${CIRCLE_SHA1}'
+            deploy_markers_deploy_name: deploy-app-b
+            auth:
+              - aws-cli/setup:
+                  role_arn: ${AWS_ROLE_ARN}
+
+        # LOG mode — records a deployment event after the deploy completes; no planned marker is created
+        - aws-code-deploy/deploy:
+            name: deploy-log
+            application_name: my-app
+            deployment_group: my-deployment-group
+            service_role_arn: ${AWS_CODEDEPLOY_SERVICE_ROLE_ARN}
+            bundle_bucket: my-app-s3-bucket
+            bundle_key: my-app-bundle
+            deploy_markers_mode: LOG
+            auth:
+              - aws-cli/setup:
+                  role_arn: ${AWS_ROLE_ARN}
+
+        # Opting out — disable deploy markers with deploy_markers_mode: OFF
+        - aws-code-deploy/deploy:
+            name: deploy-no-markers
+            application_name: my-app
+            deployment_group: my-deployment-group
+            service_role_arn: ${AWS_CODEDEPLOY_SERVICE_ROLE_ARN}
+            bundle_bucket: my-app-s3-bucket
+            bundle_key: my-app-bundle
+            deploy_markers_mode: OFF
+            auth:
+              - aws-cli/setup:
+                  role_arn: ${AWS_ROLE_ARN}
