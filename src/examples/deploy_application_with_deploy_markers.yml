@@ -5,14 +5,16 @@ description: >
   completes — no extra configuration required.
 
   This example shows the optional parameters available to customize deploy marker behavior:
-    deploy_markers_target_version  - version label shown in the CircleCI Deploys UI (defaults to short commit SHA)
-    deploy_markers_deploy_name     - unique identifier for this deployment; defaults to the workflow job ID,
-                                     which is already unique per execution, but can be set explicitly for
-                                     a more readable name in the CircleCI Deploys UI
-    deploy_markers_mode            - override the default PLAN_AND_UPDATE mode when needed:
-                                       LOG             - log a deployment event after the deploy (no planned marker)
-                                       PLAN            - create a planned marker before deploy; caller manages status updates
-                                       OFF             - disable deploy markers entirely
+    deploy_markers_target_version   - version label shown in the CircleCI Deploys UI (defaults to short commit SHA)
+    deploy_markers_deploy_name      - unique identifier for this deployment; defaults to the workflow job ID,
+                                      which is already unique per execution, but can be set explicitly for
+                                      a more readable name in the CircleCI Deploys UI
+    deploy_markers_component_name   - component name shown in the CircleCI Deploys UI; defaults to application_name
+    deploy_markers_environment_name - environment name shown in the CircleCI Deploys UI; defaults to "default"
+    deploy_markers_mode             - override the default PLAN_AND_UPDATE mode when needed:
+                                        LOG             - log a deployment event after the deploy (no planned marker)
+                                        PLAN            - create a planned marker before deploy; caller manages status updates
+                                        OFF             - disable deploy markers entirely
 
 usage:
   version: 2.1
@@ -85,6 +87,35 @@ usage:
             bundle_key: my-app-bundle
             deploy_markers_mode: PLAN
             deploy_markers_target_version: '${CIRCLE_SHA1}'
+            auth:
+              - aws-cli/setup:
+                  role_arn: ${AWS_ROLE_ARN}
+
+        # Custom component and environment names — decouple the Deploys UI labels from CodeDeploy resource names
+        - aws-code-deploy/deploy:
+            name: deploy-custom-marker-names
+            application_name: my-app-codedeploy-resource
+            deployment_group: my-deployment-group
+            service_role_arn: ${AWS_CODEDEPLOY_SERVICE_ROLE_ARN}
+            bundle_bucket: my-app-s3-bucket
+            bundle_key: my-app-bundle
+            deploy_markers_component_name: my-app
+            deploy_markers_environment_name: production
+            auth:
+              - aws-cli/setup:
+                  role_arn: ${AWS_ROLE_ARN}
+
+        # LOG mode with custom component and environment names
+        - aws-code-deploy/deploy:
+            name: deploy-log-custom-names
+            application_name: my-app-codedeploy-resource
+            deployment_group: my-deployment-group
+            service_role_arn: ${AWS_CODEDEPLOY_SERVICE_ROLE_ARN}
+            bundle_bucket: my-app-s3-bucket
+            bundle_key: my-app-bundle
+            deploy_markers_mode: LOG
+            deploy_markers_component_name: my-app
+            deploy_markers_environment_name: staging
             auth:
               - aws-cli/setup:
                   role_arn: ${AWS_ROLE_ARN}
