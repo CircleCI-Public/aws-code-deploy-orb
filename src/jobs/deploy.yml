@@ -78,6 +78,18 @@ parameters:
       Defaults to the workflow job ID, which is unique per job execution across all concurrent runs.
     type: string
     default: "${CIRCLE_WORKFLOW_JOB_ID}"
+  deploy_markers_component_name:
+    description: >
+      Component name shown in the CircleCI Deploys UI.
+      Used by LOG, PLAN, and PLAN_AND_UPDATE modes. Defaults to the application_name when not set.
+    type: string
+    default: ""
+  deploy_markers_environment_name:
+    description: >
+      Environment name shown in the CircleCI Deploys UI.
+      Used by LOG, PLAN, and PLAN_AND_UPDATE modes. Defaults to "default".
+    type: string
+    default: "default"
   deploy_markers_target_version:
     description: >
       Version identifier shown in the CircleCI Deploys UI.
@@ -105,8 +117,8 @@ steps:
       steps:
         - deploys/plan:
             deploy_name: << parameters.deploy_markers_deploy_name >>
-            component_name: << parameters.application_name >>
-            environment_name: << parameters.deployment_group >>
+            component_name: <<#parameters.deploy_markers_component_name>><< parameters.deploy_markers_component_name >><</parameters.deploy_markers_component_name>><<^parameters.deploy_markers_component_name>><< parameters.application_name >><</parameters.deploy_markers_component_name>>
+            environment_name: << parameters.deploy_markers_environment_name >>
             target_version: << parameters.deploy_markers_target_version >>
   - when:
       condition:
@@ -155,8 +167,8 @@ steps:
         equal: [<< parameters.deploy_markers_mode >>, "LOG"]
       steps:
         - deploys/log:
-            component_name: << parameters.application_name >>
-            environment_name: << parameters.deployment_group >>
+            component_name: <<#parameters.deploy_markers_component_name>><< parameters.deploy_markers_component_name >><</parameters.deploy_markers_component_name>><<^parameters.deploy_markers_component_name>><< parameters.application_name >><</parameters.deploy_markers_component_name>>
+            environment_name: << parameters.deploy_markers_environment_name >>
             target_version: << parameters.deploy_markers_target_version >>
   - when:
       condition:
